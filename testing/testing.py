@@ -35,6 +35,6 @@ class BotTesting(commands.Cog):
         perm: int
         staff_id: int
 
-    def _is_staff(self, id, min_perm):
+    async def _is_staff(self, id, min_perm):
         json = (await self._requests("GET", f"/api/admin/is_staff?user_id={id}&min_perm={min_perm}")).json()
         return [json["staff"], json["perm"], self.StaffMember(**json["sm"])]
