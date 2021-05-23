@@ -2,7 +2,7 @@ from redbot.core import commands
 from redbot.core import Config
 import aiohttp
 from aiohttp_requests import requests
-from pydantic
+from pydantic import BaseModel
 
 class BotTesting(commands.Cog):
     def __init__(self):
