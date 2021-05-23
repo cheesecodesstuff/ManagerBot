@@ -1,0 +1,5 @@
+{
+	"author": "Fates List",
+	"description": "This is the manager cog for Fates List handling most if not all manager things",
+	"install_msg": "Run [p]setupfl to setup Fates List configuration files"
+}
