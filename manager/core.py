@@ -3,7 +3,7 @@ from redbot.core import Config
 import aiohttp
 from aiohttp_requests import requests
 from pydantic import BaseModel
-from enum import IntEnum
+from aenum import IntEnum
 
 class RequestFailed(Exception):
     def __init__(self, string):
@@ -24,6 +24,7 @@ async def _request(method, ctx, bot, url, **kwargs):
         headers = {}
     headers["Authorization"] = fateslist_data.get("manager")
     headers["FatesList-RateLimitBypass"] = fateslist_data.get("rl")
+    headers["FL-API-Version"] = 2
     f = eval(f"requests.{method.lower()}")
     res = await f(fateslist_data.get("site_url") + url, json = kwargs.get("json"), headers = headers, timeout = kwargs.get("timeout"))
     if res.status == 401:
@@ -48,6 +49,16 @@ class ServerEnum(IntEnum):
     TEST_SERVER = 0
     STAFF_SERVER = 1
     COMMON = 2
+
+class Status(IntEnum):
+    """Status object (See https://docs.fateslist.xyz/basics/basic-structures#status for more information)"""
+    _init_ = 'value __doc__'
+    unknown = 0, "Unknown"
+    online = 1, "Online"
+    offline = 2, "Offline"
+    idle = 3, "Idle"
+    dnd = 4, "Do Not Disturb"
+
 
 async def _cog_check(ctx, bot, state: ServerEnum):
     """Creates a check for a cog"""
