@@ -28,7 +28,7 @@ class BotTesting(commands.Cog):
     async def claim(self, ctx, bot: Member):
         """Claims a bot. This requires you to be staff and is checked on our API"""
         if not bot.bot:
-            await ctx.send("That isn't a bot. Please make sure you are pinging a bot")
+            await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
             return
         claim_res = await _reauest("PATCH", ctx, self.bot, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": False})
         if not claim_res[1]["done"]:
