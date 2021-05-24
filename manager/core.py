@@ -16,7 +16,7 @@ async def _request(method, ctx, bot, url, **kwargs):
         if fateslist_data.get(k) is None:
             failed.append(k)
     if failed:
-        await ctx.send(f"**Request Failed**\nPlease set the needed keys using `[p]set api fateslist manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL`\n\n**Failed**\n{' '.join(failed)}")
+        await ctx.send(_token_missing(type="API Tokens", key = "fateslist", failed)
         raise RequestFailed(" ".join(failed))
     if "headers" in kwargs.keys():
         headers = kwargs["headers"]
@@ -56,6 +56,21 @@ class Status(IntEnum):
     dnd = 4, "Do Not Disturb"
 
 
+def _tokens_missing(type = "server info", key = "fateslist-si", failed):
+    if key == "fateslist-si":
+        set = "testing,TESTING_SERVER_ID staff,STAFF_SERVER_ID log_channel,STAFF_LOGCHANNEL"
+    elif key == "fateslist":
+        set = "manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL"
+    return f"**Error**\nPlease set {type} using `[p]set api {key} {set}`\n\n**Failed**\n{' '.join(failed)}"
+    
+async def _log(ctx, message):
+    servers = await bot.get_shared_api_tokens("fateslist-si")
+    log_channel = servers.get("log_channel")
+    if not log_channel:
+        await ctx.send(_token_missing(["log_channel"]))                                                              
+    channel = ctx.bot.get_channel(int(log_channel))
+    await channel.send(message)                 
+                                   
 async def _cog_check(ctx, bot, state: ServerEnum):
     """Creates a check for a cog"""
     servers = await bot.get_shared_api_tokens("fateslist-si")
@@ -64,7 +79,7 @@ async def _cog_check(ctx, bot, state: ServerEnum):
         if not servers.get(k):
             failed.append(k)
     if not servers or failed:
-        await ctx.send(f"**Error**\nPlease set server info using `[p]set api fateslist-si testing,TESTING_SERVER_ID staff,STAFF_SERVER_ID`\n\n**Failed**\n{' '.join(failed)}")
+        await ctx.send(_token_missing(failed))
         return False
     if state == ServerEnum.TEST_SERVER and ctx.guild.id != int(servers.get("testing")):
         await ctx.send("This command can only be used on the testing server")
