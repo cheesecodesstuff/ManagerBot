@@ -3,7 +3,7 @@ from redbot.core import Config
 import aiohttp
 from aiohttp_requests import requests
 from pydantic import BaseModel
-from enums import IntEnum
+from enum import IntEnum
 
 class RequestFailed(Exception):
     def __init__(self, string):
