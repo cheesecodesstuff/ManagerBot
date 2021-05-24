@@ -17,5 +17,5 @@ class BotTesting(commands.Cog):
         i = 1
         for bot in queue_json["bots"]:
             embed.add_field(name = f"{i}. {bot['username']}#{bot['disc']} ({bot['id']}) - [Invite Bot]({bot['meta']['invite']})", value = "This bot has a status of {Status(bot['status']).__doc__}")
-        embed.set_thumbnail(str(ctx.guild.icon_url))
+        embed.set_thumbnail(url = str(ctx.guild.icon_url))
         return await ctx.send(embed = embed)
