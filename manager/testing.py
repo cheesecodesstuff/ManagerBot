@@ -20,7 +20,7 @@ class BotTesting(commands.Cog):
         for bot in queue_json["bots"]:
             embed.add_field(name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
             i += 1
-        embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot amd hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
+        embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
         embed.set_thumbnail(url = str(ctx.guild.icon_url))
         return await ctx.send(embed = embed)
 
