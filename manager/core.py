@@ -40,11 +40,6 @@ class StaffMember(BaseModel):
     perm: int
     staff_id: int
 
-async def _is_staff(ctx, bot, id, min_perm: int = 2):
-    """Checks if user is staff"""
-    json = await _request("GET", ctx, bot, f"/api/admin/is_staff?user_id={id}&min_perm={min_perm}")
-    return [json["staff"], json["perm"], StaffMember(**json["sm"])]
-
 class ServerEnum(IntEnum):
     TEST_SERVER = 0
     STAFF_SERVER = 1
@@ -75,8 +70,5 @@ async def _cog_check(ctx, bot, state: ServerEnum):
         return False
     elif state == ServerEnum.STAFF_SERVER and ctx.guild.id != int(servers.get("staff")):
         await ctx.send("This command can only be used on the staff server")
-        return False
-    staff = await _is_staff(ctx, bot, ctx.author.id)
-    if not staff[0]:
         return False
     return True
