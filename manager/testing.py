@@ -11,5 +11,5 @@ class BotTesting(commands.Cog):
     @commands.command()
     async def queue(self, ctx):
         """Get all bots in queue"""
-        queue_json = await _request("GET", ctx, bot, "/api/queue")
+        queue_json = await _request("GET", ctx, self.bot, "/api/queue")
         return await ctx.send(f"{queue_json}")
