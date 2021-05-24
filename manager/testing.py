@@ -9,5 +9,7 @@ class BotTesting(commands.Cog):
         return await _cog_check(ctx, self.bot, ServerEnum.TEST_SERVER)
 
     @commands.command()
-    async def testman(self, ctx):
-        return await ctx.send("I work!!!")
+    async def queue(self, ctx):
+        """Get all bots in queue"""
+        queue_json = await _request("GET", ctx, bot, "/api/queue")
+        return await ctx.send(f"{queue_json}")
