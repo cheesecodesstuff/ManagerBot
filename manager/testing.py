@@ -34,7 +34,7 @@ class BotTesting(commands.Cog):
         if not claim_res[1]["done"]:
             embed = Embed(title = "Claim Failed", description = f"This bot could not be claimed by you...", color = Color.red())
             embed.add_field(name = "Reason", value = claim_res[1]["reason"])
-            embed.add_field(name = "Status Code", value = f"{claim_res[0]} ({HTTPStatus(claim_res[0]).phrase}")
+            embed.add_field(name = "Status Code", value = f"{claim_res[0]} ({HTTPStatus(claim_res[0]).phrase})")
             await ctx.send(embed = embed)
             return
         embed = Embed(title = "Claimed", description = "This bot has been claimed. Use +unclaim when you don't want it anymore")
