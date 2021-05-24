@@ -42,7 +42,7 @@ class StaffMember(BaseModel):
 async def _is_staff(ctx, bot, id, min_perm: int = 2):
     """Checks if user is staff"""
     json = await _request("GET", bot, ctx, f"/api/admin/is_staff?user_id={id}&min_perm={min_perm}")
-    return [json["staff"], json["perm"], self.StaffMember(**json["sm"])]
+    return [json["staff"], json["perm"], StaffMember(**json["sm"])]
 
 class ServerEnum(IntEnum):
     TEST_SERVER = 0
