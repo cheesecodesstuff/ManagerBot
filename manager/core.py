@@ -25,7 +25,7 @@ async def _request(method, bot, ctx, url, **kwargs):
     headers["Authorization"] = fateslist_data.get("manager")
     headers["FatesList-RateLimitBypass"] = fateslist_data.get("rl")
     f = eval(f"requests.{method.lower()}")
-    res = await f(url = fateslist_data.get("site_url") + url, json = kwargs.get("json"), headers = headers, timeout = kwargs.get("timeout"))
+    res = await f(fateslist_data.get("site_url") + url, json = kwargs.get("json"), headers = headers, timeout = kwargs.get("timeout"))
     if res.status == 401:
         await ctx.send("**Request Failed**\nGiven API Keys are invalid! nPlease set the needed keys using `[p]set api fateslist manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL`")
         raise RequestFailed("Invalid API Keys")
