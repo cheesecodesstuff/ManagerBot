@@ -93,18 +93,16 @@ async def _cog_check(ctx, bot, state: ServerEnum):
 
 # TODO: Put this in core as it will be used in other places
 async def _claim(ctx, bot, bot_id, claim: int):
-    if claim:
+    if claim == 0:
         op = "Claim" # Action
         succ = "Use +unclaim when you don't want it anymore" # Success message
-        requeue = 0
-    else:
+    elif claim == 2:
         op = "Unclaim"
         succ = "Use +claim to start retesting the bot." 
-        requeue = 2
     if not bot.bot:
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
-    claim_res = await _request("PATCH", ctx, bot, f"/api/bots/admin/{bot_id}/under_review", json = {"mod": str(ctx.author.id), "requeue": requeue})
+    claim_res = await _request("PATCH", ctx, bot, f"/api/bots/admin/{bot_id}/under_review", json = {"mod": str(ctx.author.id), "requeue": claim})
     if not claim_res[1]["done"]:
         embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.lower()}ed by you...", color = Color.red())
         embed.add_field(name = "Reason", value = claim_res[1]["reason"])
