@@ -6,5 +6,5 @@ class BotTesting(commands.Cog):
         return await _cog_check(ctx, self.bot, ServerEnum.TESTING_SERVER)
 
     @commands.command()
-    async def ping(self, ctx):
+    async def testman(self, ctx):
         return await ctx.send("I work!!!")
