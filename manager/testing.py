@@ -31,10 +31,10 @@ class BotTesting(commands.Cog):
         
     @commands.command()
     async def unclaim(self, ctx, bot: User):
+        """Unclaims a bot so other reviewers can test it"""
         return await self._claim(ctx, bot, False)
     
     async def _claim(self, ctx, bot: User, claim: bool):
-        """Claims a bot. This requires you to be staff and is checked on our API"""
         if claim:
             op = "Claim" # Action
             succ = "Use +unclaim when you don't want it anymore" # Success message
