@@ -4,6 +4,8 @@ import aiohttp
 from aiohttp_requests import requests
 from pydantic import BaseModel
 from aenum import IntEnum
+from discord import Embed, User, Color
+from http import HTTPStatus
 
 class RequestFailed(Exception):
     def __init__(self, string):
