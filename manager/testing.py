@@ -13,10 +13,10 @@ class BotTesting(commands.Cog):
     async def queue(self, ctx):
         """Get all bots in queue"""
         queue_json = await _request("GET", ctx, self.bot, "/api/bots/admin/queue")
-        embed = Embed(title = "Bots In Queue", description = "\hese are the bots in the Fates List Queue. Be sure to review them from top to bottom, ignoring Fates List bots")
+        embed = Embed(title = "Bots In Queue", description = "These are the bots in the Fates List Queue. Be sure to review them from top to bottom, ignoring Fates List bots")
         i = 1
         for bot in queue_json["bots"]:
-            embed.add_field(name = f"\n\n{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n")
+            embed.add_field(name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
             i += 1
         embed.set_thumbnail(url = str(ctx.guild.icon_url))
         return await ctx.send(embed = embed)
