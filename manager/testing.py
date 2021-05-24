@@ -31,7 +31,7 @@ class BotTesting(commands.Cog):
             return
         claim_res = await _reauest("PATCH", ctx, self.bot, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": False})
         if not claim_res[1]["done"]:
-            embed = Embed(title = "Claim Failed" description = f"This bot could not be claimed by you...", color = Color.red())
+            embed = Embed(title = "Claim Failed", description = f"This bot could not be claimed by you...", color = Color.red())
             embed.add_field(name = "Reason", value = claim_res[1]["reason"])
             embed.add_field(name = "Status Code", value = f"{claim_res[0]} ({HTTPStatus(claim_res[0]).phrase}")
             await ctx.send(embed = embed)
