@@ -9,7 +9,7 @@ class RequestFailed(Exception):
     def __init__(self, string):
         super.__init__(string)
 
-async def _request(method, bot, ctx, url, **kwargs):
+async def _request(method, ctx, bot, url, **kwargs):
     fateslist_data = await bot.get_shared_api_tokens("fateslist")
     failed = []
     for k in ["manager", "rl", "site_url"]:
@@ -41,7 +41,7 @@ class StaffMember(BaseModel):
 
 async def _is_staff(ctx, bot, id, min_perm: int = 2):
     """Checks if user is staff"""
-    json = await _request("GET", bot, ctx, f"/api/admin/is_staff?user_id={id}&min_perm={min_perm}")
+    json = await _request("GET", ctx, bot, f"/api/admin/is_staff?user_id={id}&min_perm={min_perm}")
     return [json["staff"], json["perm"], StaffMember(**json["sm"])]
 
 class ServerEnum(IntEnum):
