@@ -59,13 +59,13 @@ async def _cog_check(ctx, bot, state: ServerEnum):
     if not servers or failed:
         await ctx.send(f"**Error**\nPlease set server info using `[p]set api fateslist-si testing,TESTING_SERVER_ID staff,STAFF_SERVER_ID`\n\n**Failed**\n{' '.join(failed)}")
         return False
-    staff = await _is_staff(ctx, bot, ctx.author.id)
-    if not staff[0]:
-        return False
     if state == ServerEnum.TEST_SERVER and ctx.guild.id != int(servers.get("testing")):
         await ctx.send("This command can only be used on the testing server")
         return False
     elif state == ServerEnum.STAFF_SERVER and ctx.guild.id != int(servers.get("staff")):
         await ctx.send("This command can only be used on the staff server")
+        return False
+    staff = await _is_staff(ctx, bot, ctx.author.id)
+    if not staff[0]:
         return False
     return True
