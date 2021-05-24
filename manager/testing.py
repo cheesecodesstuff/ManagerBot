@@ -1,4 +1,4 @@
-from .core import _is_staff, _cog_check, _request, ServerEnum, Status
+from .core import _cog_check, _request, ServerEnum, Status
 from redbot.core import commands
 from discord import Embed
 
