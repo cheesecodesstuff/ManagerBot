@@ -24,7 +24,7 @@ async def _request(method, ctx, bot, url, **kwargs):
         headers = {}
     headers["Authorization"] = fateslist_data.get("manager")
     headers["FatesList-RateLimitBypass"] = fateslist_data.get("rl")
-    headers["FL-API-Version"] = 2
+    headers["FL-API-Version"] = "2"
     f = eval(f"requests.{method.lower()}")
     res = await f(fateslist_data.get("site_url") + url, json = kwargs.get("json"), headers = headers, timeout = kwargs.get("timeout"))
     if res.status == 401:
