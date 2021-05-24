@@ -1,4 +1,4 @@
-from .core import _cog_check, _request, ServerEnum, Status
+from .core import _cog_check, _request, _claim, ServerEnum, Status
 from redbot.core import commands
 from discord import Embed, User, Color
 from http import HTTPStatus
@@ -27,32 +27,10 @@ class BotTesting(commands.Cog):
     @commands.command()
     async def claim(self, ctx, bot: User):
         """Claims a bot. This requires you to be staff and is checked on our API"""
-        return await self._claim(ctx, bot, True)
+        return await _claim(ctx, self.bot, bot.id, 0)
         
     @commands.command()
     async def unclaim(self, ctx, bot: User):
         """Unclaims a bot so other reviewers can test it"""
-        return await self._claim(ctx, bot, False)
+        return await _claim(ctx, self.bot, bot.id, 2)
     
-    # TODO: Put this in core as it will be used in other places
-    async def _claim(self, ctx, bot: User, claim: bool):
-        if claim:
-            op = "Claim" # Action
-            succ = "Use +unclaim when you don't want it anymore" # Success message
-            requeue = 0
-        else:
-            op = "Unclaim"
-            succ = "Use +claim to start retesting the bot." 
-            requeue = 2
-        if not bot.bot:
-            await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
-            return
-        claim_res = await _request("PATCH", ctx, self.bot, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": requeue})
-        if not claim_res[1]["done"]:
-            embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.lower()}ed by you...", color = Color.red())
-            embed.add_field(name = "Reason", value = claim_res[1]["reason"])
-            embed.add_field(name = "Status Code", value = f"{claim_res[0]} ({HTTPStatus(claim_res[0]).phrase})")
-            await ctx.send(embed = embed)
-            return
-        embed = Embed(title = f"{op}ed", description = f"This bot has been {op}ed. {succ}. This is important")
-        await ctx.send(embed = embed)
