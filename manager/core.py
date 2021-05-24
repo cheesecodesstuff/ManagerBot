@@ -30,7 +30,7 @@ async def _request(method, ctx, bot, url, **kwargs):
     if res.status == 401:
         await ctx.send("**Request Failed**\nGiven API Keys are invalid! nPlease set the needed keys using `[p]set api fateslist manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL`")
         raise RequestFailed("Invalid API Keys")
-    res_jaon = await res.json()
+    res_json = await res.json()
     return res.status, res_json
    
 # Copy this from Fates
