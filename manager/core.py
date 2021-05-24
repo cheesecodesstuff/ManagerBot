@@ -10,7 +10,7 @@ class RequestFailed(Exception):
         super.__init__(string)
 
 async def _request(method, bot, ctx, url, **kwargs):
-    fateslist_data = await bot.get_shared_api_token("fateslist")
+    fateslist_data = await bot.get_shared_api_tokens("fateslist")
     failed = []
     for k in ["manager", "rl", "site_url"]:
         if fateslist_data.get(k) is None:
