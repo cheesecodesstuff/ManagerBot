@@ -1,6 +1,6 @@
 from .core import _cog_check, _request, ServerEnum, Status
 from redbot.core import commands
-from discord import Embed, Member, Color
+from discord import Embed, User, Color
 from http import HTTPStatus
 
 class BotTesting(commands.Cog):
@@ -25,7 +25,7 @@ class BotTesting(commands.Cog):
         return await ctx.send(embed = embed)
 
     @commands.command()
-    async def claim(self, ctx, bot: Member):
+    async def claim(self, ctx, bot: User):
         """Claims a bot. This requires you to be staff and is checked on our API"""
         if not bot.bot:
             await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
