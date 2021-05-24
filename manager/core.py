@@ -90,3 +90,27 @@ async def _cog_check(ctx, bot, state: ServerEnum):
         await ctx.send("This command can only be used on the staff server")
         return False
     return True
+
+# TODO: Put this in core as it will be used in other places
+async def _claim(ctx, bot, bot_id, claim: int):
+    if claim:
+        op = "Claim" # Action
+        succ = "Use +unclaim when you don't want it anymore" # Success message
+        requeue = 0
+    else:
+        op = "Unclaim"
+        succ = "Use +claim to start retesting the bot." 
+        requeue = 2
+    if not bot.bot:
+        await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
+        return
+    claim_res = await _request("PATCH", ctx, bot, f"/api/bots/admin/{bot_id}/under_review", json = {"mod": str(ctx.author.id), "requeue": requeue})
+    if not claim_res[1]["done"]:
+        embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.lower()}ed by you...", color = Color.red())
+        embed.add_field(name = "Reason", value = claim_res[1]["reason"])
+        embed.add_field(name = "Status Code", value = f"{claim_res[0]} ({HTTPStatus(claim_res[0]).phrase})")
+        await ctx.send(embed = embed)
+        return
+    embed = Embed(title = f"{op}ed", description = f"This bot has been {op}ed. {succ}. This is important")
+    await ctx.send(embed = embed)
+
