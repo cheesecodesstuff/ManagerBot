@@ -110,7 +110,7 @@ async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to re
     await _log(ctx, f"{target.name}#{target.discriminator} has been {op.replace('y', 'i').lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
     if kick:
         member = ctx.guild.get_member(target.id)
-        if target.top_role.position >= ctx.me.top_role.position:
+        if member.top_role.position >= ctx.me.top_role.position:
             await ctx.send("I could not kick this member as they have a higher role than me.")
             return
         await member.kick(reason = f"Kicked as bot {op.replace('y', 'i').lower()}ed")
