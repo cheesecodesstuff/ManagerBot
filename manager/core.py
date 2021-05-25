@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from aenum import IntEnum
 from discord import Embed, User, Color
 from http import HTTPStatus
+from typing import Optional
 
 class RequestFailed(Exception):
     def __init__(self, string):
@@ -97,7 +98,7 @@ async def _cog_check(ctx, state: ServerEnum):
         return False
     return True
 
-async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to relax"):
+async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to relax", kick: Optional[bool] = False):
     if not res[1]["done"]:
         embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.replace('y', 'i').lower()}ed by you...", color = Color.red())
         embed.add_field(name = "Reason", value = res[1]["reason"])
@@ -107,8 +108,13 @@ async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to re
     embed = Embed(title = f"{op.replace('y', 'i')}ed", description = f"This bot has been {op.replace('y', 'i').lower()}ed. {succ}. This is important")
     await ctx.send(embed = embed)
     await _log(ctx, f"{target.name}#{target.discriminator} has been {op.replace('y', 'i').lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
-
-
+    if kick:
+        member = ctx.guild.get_member(target.id)
+        if target.top_role.position >= ctx.me.top_role.position:
+            await ctx.send("I could not kick this member as they have a higher role than me.")
+            return
+        await member.kick(reason = f"Kicked as bot {op.replace('y', 'i').lower()}ed")
+       
 # TODO: Put this in core as it will be used in other places
 async def _claim_unclaim_requeue(ctx, bot: User, t: int):
     """Claims, unclaims or requeues a bot, takes integer t with either 0 for claim, 1 for requeue (not yet done) or 2 for unclaim"""
@@ -133,4 +139,4 @@ async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
     else:
         op = "Deny"
     approve_res = await _request("PATCH", ctx, f"/api/v2/bots/admin/{bot.id}/queue", json = {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
-    return await _handle(ctx, bot, op, approve_res)
+    return await _handle(ctx, bot, op, approve_res, kick = True)
