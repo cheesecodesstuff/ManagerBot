@@ -103,14 +103,15 @@ async def _cog_check(ctx, state: ServerEnum):
     return True
  
 async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to relax", kick: Optional[bool] = False):
+    opt = op
+    if op.endswith("n"):
+        op += "n" # Double n
     if not res[1]["done"]:
-        embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.replace('y', 'i').lower()}ed by you...", color = Color.red())
+        embed = Embed(title = f"{opt} Failed", description = f"This bot could not be {op.replace('y', 'i').lower()}ed by you...", color = Color.red())
         embed.add_field(name = "Reason", value = res[1]["reason"])
         embed.add_field(name = "Status Code", value = f"{res[0]} ({HTTPStatus(res[0]).phrase})")
         await ctx.send(embed = embed)
         return
-    if op.endswith("n"):
-        op += "n" # Double n
     embed = Embed(title = f"{op.replace('y', 'i')}ed", description = f"This bot has been {op.replace('y', 'i').lower()}ed. {succ}. This is important")
     if res[1]["reason"]:
         embed.add_field(name = "Additional", value = res[1]["reason"])
