@@ -93,11 +93,11 @@ async def _cog_check(ctx, state: ServerEnum):
         await ctx.send(_tokens_missing(failed))
         return False
     if state == ServerEnum.TEST_SERVER and ctx.guild.id != int(servers.get("testing")):
-        embed = Embed(title = "Testing Server Only!", description = "This command can only be used on the testing server")
+        embed = Embed(title = "Testing Server Only!", description = "This command can only be used on the testing server", color = Color.red())
         await ctx.send(embed = embed)
         return False
     elif state == ServerEnum.STAFF_SERVER and ctx.guild.id != int(servers.get("staff")):
-        embed = Embed(title = "Staff Server Only!", description = "This command can only be used on the staff server")
+        embed = Embed(title = "Staff Server Only!", description = "This command can only be used on the staff server", color = Color.red())
         await ctx.send(embed = embed)
         return False
     return True
