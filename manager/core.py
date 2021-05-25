@@ -113,4 +113,5 @@ async def _claim(ctx, bot, bot_obj, claim: int):
         return
     embed = Embed(title = f"{op}ed", description = f"This bot has been {op.lower()}ed. {succ}. This is important")
     await ctx.send(embed = embed)
+    await _log(ctx, f"{bot_obj.name}#{bot_obj.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
 
