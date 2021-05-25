@@ -97,6 +97,18 @@ async def _cog_check(ctx, state: ServerEnum):
         return False
     return True
 
+async def _handle(ctx, target: User, op: str, res: dict):
+    if not res[1]["done"]:
+        embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.replace('y', 'i').lower()}ed by you...", color = Color.red())
+        embed.add_field(name = "Reason", value = res[1]["reason"])
+        embed.add_field(name = "Status Code", value = f"{res[0]} ({HTTPStatus(res[0]).phrase})")
+        await ctx.send(embed = embed)
+        return
+    embed = Embed(title = f"{op}ed", description = f"This bot has been {op.replace('y', 'i').lower()}ed. {succ}. This is important")
+    await ctx.send(embed = embed)
+    await _log(ctx, f"{target.name}#{target.discriminator} has been {op.replace('y', 'i').lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
+
+
 # TODO: Put this in core as it will be used in other places
 async def _claim_unclaim_requeue(ctx, bot: User, t: int):
     """Claims, unclaims or requeues a bot, takes integer t with either 0 for claim, 1 for requeue (not yet done) or 2 for unclaim"""
@@ -110,18 +122,15 @@ async def _claim_unclaim_requeue(ctx, bot: User, t: int):
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
     claim_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": t})
-    if not claim_res[1]["done"]:
-        embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.lower()}ed by you...", color = Color.red())
-        embed.add_field(name = "Reason", value = claim_res[1]["reason"])
-        embed.add_field(name = "Status Code", value = f"{claim_res[0]} ({HTTPStatus(claim_res[0]).phrase})")
-        await ctx.send(embed = embed)
-        return
-    embed = Embed(title = f"{op}ed", description = f"This bot has been {op.lower()}ed. {succ}. This is important")
-    await ctx.send(embed = embed)
-    await _log(ctx, f"{bot.name}#{bot.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
-
-async def _approve_deny(ctx, bot: User, approve: bool):
+    return await _handle(ctx, bot, op, claim_res)
+    
+async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
     if not bot.bot:
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
-    approve_res = await _request("PATCH", f"/api/v2/bots/admin/{bot.id}/queue")
+    if approve:
+        op = "Approve"
+    else:
+        op = "Deny"
+    approve_res = await _request("PATCH", f"/api/v2/bots/admin/{bot.id}/queue", {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
+    return await _handle(ctx, bot, op, approve_res)
