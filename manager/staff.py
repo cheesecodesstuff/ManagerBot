@@ -1,4 +1,4 @@
-from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing
+from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing, _ban_unban
 from redbot.core import commands
 from discord import Embed, User, Color
 from http import HTTPStatus
@@ -31,3 +31,8 @@ class Staff(commands.Cog):
         staff_ag = int(servers.get("ag_role"))
         await ctx.author.add_roles( ctx.guild.get_role(staff_ag), ctx.guild.get_role(int(staff[2].staff_id)) )
         await ctx.send("Welcome home, master!")
+
+    @commands.command()
+    async def ban(self, ctx, bot: User, *, reason: Optional[str] = None):
+        """Bans a bot from the list"""
+        return await _ban_unban(ctx, bot, reason, True)
