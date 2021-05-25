@@ -36,3 +36,8 @@ class Staff(commands.Cog):
     async def ban(self, ctx, bot: User, *, reason: Optional[str] = None):
         """Bans a bot from the list"""
         return await _ban_unban(ctx, bot, reason, True)
+
+    @commands.command()
+    async def unban(self, ctx, bot: User):
+        """unban a bot from the list"""
+        return await _ban_unban(ctx, bot, "", False)
