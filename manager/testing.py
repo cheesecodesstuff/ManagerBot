@@ -1,7 +1,8 @@
-from .core import _cog_check, _request, _claim_unclaim_requeue, ServerEnum, Status
+from .core import _cog_check, _request, _claim_unclaim_requeue, _approve_deny, ServerEnum, Status
 from redbot.core import commands
 from discord import Embed, User, Color
 from http import HTTPStatus
+from typing import Optional
 
 class BotTesting(commands.Cog):
     """Commands for queueing, testing and approving bots"""
@@ -35,3 +36,12 @@ class BotTesting(commands.Cog):
         """Unclaims a bot so other reviewers can test it"""
         return await _claim_unclaim_requeue(ctx, bot, 2)
     
+    @commands.command()
+    async def approve(self, ctx, bot: User, *, feedback: Optional[str] = None):
+        """Approves a bot. You must claim the bot first"""
+        return await _approve_deny(ctx, bot, feedback, True)
+
+    @commands.command()
+    async def deny(self, ctx, bot: User, *, feedback: Optional[str] = None):
+        """Denies a bot. You must claim the bot first"""
+        return await _approve_deny(ctx, bot, feedback, False)
