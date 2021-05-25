@@ -90,7 +90,7 @@ async def _cog_check(ctx, state: ServerEnum):
         if not servers.get(k):
             failed.append(k)
     if not servers or failed:
-        await ctx.send(_token_missing(failed))
+        await ctx.send(_tokens_missing(failed))
         return False
     if state == ServerEnum.TEST_SERVER and ctx.guild.id != int(servers.get("testing")):
         embed = Embed(title = "Testing Server Only!", description = "This command can only be used on the testing server")
