@@ -25,3 +25,4 @@ class Staff(commands.Cog):
             return
         staff_ag = int(servers.get("ag_role"))
         await ctx.author.add_roles( ctx.guild.get_role(staff_ag), ctx.guild.get_role(int(staff[2].staff_id)) )
+        await ctx.send("Welcome home, master!")
