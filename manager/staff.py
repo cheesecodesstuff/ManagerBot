@@ -21,6 +21,6 @@ class Staff(commands.Cog):
             return
         servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
         if not servers.get("ag_role"):
-            await ctx.send(_token_missing("ag_role"))
+            await ctx.send(_tokens_missing("ag_role"))
         staff_ag = int(servers.get("ag_role"))
         await ctx.author.add_roles( ctx.guild.get_role(staff_ag), ctx.guild.get_role(int(staff[2].staff_id)) )
