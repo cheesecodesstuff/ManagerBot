@@ -67,7 +67,7 @@ def _tokens_missing(failed, key = "fateslist-si"):
         set = "manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL"
     return f"**Error**\nPlease set {type} using `[p]set api {key} {set}`\n\n**Failed**\n{' '.join(failed)}"
     
-async def _log(ctx, message):
+async def _log(ctx, bot, message):
     servers = await bot.get_shared_api_tokens("fateslist-si")
     log_channel = servers.get("log_channel")
     if not log_channel:
@@ -113,5 +113,5 @@ async def _claim(ctx, bot, bot_obj, claim: int):
         return
     embed = Embed(title = f"{op}ed", description = f"This bot has been {op.lower()}ed. {succ}. This is important")
     await ctx.send(embed = embed)
-    await _log(ctx, f"{bot_obj.name}#{bot_obj.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
+    await _log(ctx, bot, f"{bot_obj.name}#{bot_obj.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
 
