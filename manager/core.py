@@ -148,7 +148,7 @@ async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
     approve_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/queue", json = {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
     return await _handle(ctx, bot, op, approve_res, kick = True)
 
-async def _ban_unban(ctx, bot: User, feedback: str, ban: bool):
+async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
     if not bot.bot:
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
@@ -156,5 +156,5 @@ async def _ban_unban(ctx, bot: User, feedback: str, ban: bool):
         op = "Ban"
     else:
         op = "Unban"
-    ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": feedback})
+    ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": reason})
     return await _handle(ctx, bot, op, ban_res)
