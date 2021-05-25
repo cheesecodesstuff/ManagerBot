@@ -11,8 +11,8 @@ class RequestFailed(Exception):
     def __init__(self, string):
         super.__init__(string)
 
-async def _request(method, ctx, bot, url, **kwargs):
-    fateslist_data = await bot.get_shared_api_tokens("fateslist")
+async def _request(method, ctx, url, **kwargs):
+    fateslist_data = await ctx.bot.get_shared_api_tokens("fateslist")
     failed = []
     for k in ["manager", "rl", "site_url"]:
         if fateslist_data.get(k) is None:
@@ -67,17 +67,17 @@ def _tokens_missing(failed, key = "fateslist-si"):
         set = "manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL"
     return f"**Error**\nPlease set {type} using `[p]set api {key} {set}`\n\n**Failed**\n{' '.join(failed)}"
     
-async def _log(ctx, bot, message):
-    servers = await bot.get_shared_api_tokens("fateslist-si")
+async def _log(ctx, message):
+    servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
     log_channel = servers.get("log_channel")
     if not log_channel:
         await ctx.send(_token_missing(["log_channel"]))                                                              
     channel = ctx.bot.get_channel(int(log_channel))
     await channel.send(message)                 
                                    
-async def _cog_check(ctx, bot, state: ServerEnum):
+async def _cog_check(ctx, state: ServerEnum):
     """Creates a check for a cog"""
-    servers = await bot.get_shared_api_tokens("fateslist-si")
+    servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
     failed = []
     for k in ["testing", "staff"]:
         if not servers.get(k):
@@ -94,17 +94,17 @@ async def _cog_check(ctx, bot, state: ServerEnum):
     return True
 
 # TODO: Put this in core as it will be used in other places
-async def _claim(ctx, bot, bot_obj, claim: int):
+async def _claim(ctx, bot, claim: int):
     if claim == 0:
         op = "Claim" # Action
         succ = "Use +unclaim when you don't want it anymore" # Success message
     elif claim == 2:
         op = "Unclaim"
         succ = "Use +claim to start retesting the bot." 
-    if not bot_obj.bot:
+    if not bot.bot:
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
-    claim_res = await _request("PATCH", ctx, bot, f"/api/bots/admin/{bot_obj.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": claim})
+    claim_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": claim})
     if not claim_res[1]["done"]:
         embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.lower()}ed by you...", color = Color.red())
         embed.add_field(name = "Reason", value = claim_res[1]["reason"])
@@ -113,5 +113,5 @@ async def _claim(ctx, bot, bot_obj, claim: int):
         return
     embed = Embed(title = f"{op}ed", description = f"This bot has been {op.lower()}ed. {succ}. This is important")
     await ctx.send(embed = embed)
-    await _log(ctx, bot, f"{bot_obj.name}#{bot_obj.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
+    await _log(ctx, f"{bot.name}#{bot.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
 
