@@ -4,6 +4,7 @@ from discord import Embed, User, Color
 from http import HTTPStatus
 
 class BotTesting(commands.Cog):
+    """Commands for queueing, testing and approving bots"""
     def __init__(self, bot):
         self.bot = bot
 
@@ -26,7 +27,7 @@ class BotTesting(commands.Cog):
 
     @commands.command()
     async def claim(self, ctx, bot: User):
-        """Claims a bot. This requires you to be staff and is checked on our API"""
+        """Claims a bot. This is **REQUIRED**"""
         return await _claim(ctx, bot, 0)
         
     @commands.command()
