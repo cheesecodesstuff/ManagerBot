@@ -104,7 +104,7 @@ async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to re
         embed.add_field(name = "Status Code", value = f"{res[0]} ({HTTPStatus(res[0]).phrase})")
         await ctx.send(embed = embed)
         return
-    embed = Embed(title = f"{op}ed", description = f"This bot has been {op.replace('y', 'i').lower()}ed. {succ}. This is important")
+    embed = Embed(title = f"{op.replace('y', 'i')}ed", description = f"This bot has been {op.replace('y', 'i').lower()}ed. {succ}. This is important")
     await ctx.send(embed = embed)
     await _log(ctx, f"{target.name}#{target.discriminator} has been {op.replace('y', 'i').lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
 
