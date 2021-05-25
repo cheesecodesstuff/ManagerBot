@@ -3,6 +3,9 @@ from redbot.core import commands
 class Setup(commands.Cog):
     """Setup manager cog"""
 
+    def __init__(self, bot):
+        self.bot = bot
+    
     @commands.command()
     async def setup(self, ctx):
         """Setup instructions"""
