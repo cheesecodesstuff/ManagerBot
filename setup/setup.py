@@ -14,5 +14,7 @@ class Setup(commands.Cog):
                 1. Run `{ctx.prefix}set api fateslist manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL`
                 2. Run `{ctx.prefix}set api fateslist-si testing,TESTING_SERVER_ID staff,STAFF_SERVER_ID log_channel,STAFF_LOGCHANNEL`
                 3. Install the manager cog using: `{ctx.prefix}cog install fates manager`
+                
+                It is recommended to install hider from https://github.com/Flame442/FlameCogs and hide uneeded commands especially from core. Unload all cogs other than downloader and remove third party cogs so they dont steal API Tokens
             """
         )
