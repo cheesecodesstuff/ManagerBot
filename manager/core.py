@@ -88,25 +88,28 @@ async def _cog_check(ctx, state: ServerEnum):
         await ctx.send(_token_missing(failed))
         return False
     if state == ServerEnum.TEST_SERVER and ctx.guild.id != int(servers.get("testing")):
-        await ctx.send("This command can only be used on the testing server")
+        embed = Embed(name="Wrong Server", description="This command can only be used on the testing server")
+        await ctx.send(embed = embed)
         return False
     elif state == ServerEnum.STAFF_SERVER and ctx.guild.id != int(servers.get("staff")):
-        await ctx.send("This command can only be used on the staff server")
+        embed = Embed(name="Wrong Server", description="This command can only be used on the staff server")
+        await ctx.send(embed = embed)
         return False
     return True
 
 # TODO: Put this in core as it will be used in other places
-async def _claim(ctx, bot, claim: int):
-    if claim == 0:
+async def _claim_unclaim_requeue(ctx, bot, t: int):
+    """Claims, unclaims or requeues a bot, takes integer t with either 0 for claim, 1 for requeue (not yet done) or 2 for unclaim"""
+    if t == 0:
         op = "Claim" # Action
         succ = "Use +unclaim when you don't want it anymore" # Success message
-    elif claim == 2:
+    elif t == 2:
         op = "Unclaim"
         succ = "Use +claim to start retesting the bot." 
     if not bot.bot:
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
-    claim_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": claim})
+    claim_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": t})
     if not claim_res[1]["done"]:
         embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.lower()}ed by you...", color = Color.red())
         embed.add_field(name = "Reason", value = claim_res[1]["reason"])
