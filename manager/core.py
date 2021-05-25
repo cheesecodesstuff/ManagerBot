@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from aenum import IntEnum
 from discord import Embed, User, Color
 from http import HTTPStatus
-from typing import Optional
+from typing import Optional, Union
 
 class RequestFailed(Exception):
     def __init__(self, string):
@@ -40,9 +40,9 @@ async def _request(method, ctx, url, **kwargs):
 class StaffMember(BaseModel):
     """Represents a staff member in Fates List""" 
     name: str
-    id: int
+    id: Union[str, int]
     perm: int
-    staff_id: int
+    staff_id: Union[str, int]
 
 class ServerEnum(IntEnum):
     TEST_SERVER = 0
@@ -58,6 +58,9 @@ class Status(IntEnum):
     idle = 3, "Idle"
     dnd = 4, "Do Not Disturb"
 
+async def _is_staff(ctx, user_id: int, min_perm: int = 2):
+    res = await _request("GET", ctx, f"/api/admin/staff?user_id={user_id}&min_perm={min_perm}")
+    return res["staff"], res["perm"], StaffMember(**res["sm"])
 
 def _tokens_missing(failed, key = "fateslist-si"): 
     if key == "fateslist-si":
