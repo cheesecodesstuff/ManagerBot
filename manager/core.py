@@ -97,7 +97,7 @@ async def _cog_check(ctx, state: ServerEnum):
         return False
     return True
 
-async def _handle(ctx, target: User, op: str, res: dict):
+async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to relax"):
     if not res[1]["done"]:
         embed = Embed(title = f"{op} Failed", description = f"This bot could not be {op.replace('y', 'i').lower()}ed by you...", color = Color.red())
         embed.add_field(name = "Reason", value = res[1]["reason"])
@@ -122,7 +122,7 @@ async def _claim_unclaim_requeue(ctx, bot: User, t: int):
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
     claim_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": t})
-    return await _handle(ctx, bot, op, claim_res)
+    return await _handle(ctx, bot, op, claim_res, succ)
     
 async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
     if not bot.bot:
