@@ -28,10 +28,10 @@ class BotTesting(commands.Cog):
     @commands.command()
     async def claim(self, ctx, bot: User):
         """Claims a bot. This is **REQUIRED**"""
-        return await _claim(ctx, bot, 0)
+        return await _claim_unclaim_requeue(ctx, bot, 0)
         
     @commands.command()
     async def unclaim(self, ctx, bot: User):
         """Unclaims a bot so other reviewers can test it"""
-        return await _claim(ctx, bot, 2)
+        return await _claim_unclaim_requeue(ctx, bot, 2)
     
