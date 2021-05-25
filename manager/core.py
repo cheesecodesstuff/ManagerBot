@@ -112,6 +112,7 @@ async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to re
     embed = Embed(title = f"{op.replace('y', 'i')}ed", description = f"This bot has been {op.replace('y', 'i').lower()}ed. {succ}. This is important")
     if res[1]["reason"]:
         embed.add_field(name = "Additional", value = res[1]["reason"])
+    embed.add_field(name = "Status Code", value = f"{res[0]} ({HTTPStatus(res[0]).phrase})")
     await ctx.send(embed = embed)
     await _log(ctx, f"{target.name}#{target.discriminator} has been {op.replace('y', 'i').lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
     if kick:
@@ -146,3 +147,14 @@ async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
         op = "Deny"
     approve_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/queue", json = {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
     return await _handle(ctx, bot, op, approve_res, kick = True)
+
+async def _ban_unban(ctx, bot: User, feedback: str, ban: bool):
+    if not bot.bot:
+        await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
+        return
+    if ban:
+        op = "Ban"
+    else:
+        op = "Unban"
+    ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": feedback})
+    return await _handle(ctx, bot, op, ban_res)
