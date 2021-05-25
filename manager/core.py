@@ -111,6 +111,6 @@ async def _claim(ctx, bot, bot_obj, claim: int):
         embed.add_field(name = "Status Code", value = f"{claim_res[0]} ({HTTPStatus(claim_res[0]).phrase})")
         await ctx.send(embed = embed)
         return
-    embed = Embed(title = f"{op}ed", description = f"This bot has been {op}ed. {succ}. This is important")
+    embed = Embed(title = f"{op}ed", description = f"This bot has been {op.lower()}ed. {succ}. This is important")
     await ctx.send(embed = embed)
 
