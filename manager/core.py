@@ -59,7 +59,7 @@ class Status(IntEnum):
     dnd = 4, "Do Not Disturb"
 
 async def _is_staff(ctx, user_id: int, min_perm: int = 2):
-    res = await _request("GET", ctx, f"/api/admin/staff?user_id={user_id}&min_perm={min_perm}")
+    res = await _request("GET", ctx, f"/api/admin/is_staff?user_id={user_id}&min_perm={min_perm}")
     res = res[1]
     return res["staff"], res["perm"], StaffMember(**res["sm"])
 
