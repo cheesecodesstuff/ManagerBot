@@ -76,7 +76,7 @@ async def _log(ctx, message):
     servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
     log_channel = servers.get("log_channel")
     if not log_channel:
-        await ctx.send(_token_missing(["log_channel"]))                                                              
+        await ctx.send(_tokens_missing(["log_channel"]))                                                              
     channel = ctx.bot.get_channel(int(log_channel))
     await channel.send(message)                 
                                    
