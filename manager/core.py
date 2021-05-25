@@ -98,7 +98,7 @@ async def _cog_check(ctx, state: ServerEnum):
     return True
 
 # TODO: Put this in core as it will be used in other places
-async def _claim_unclaim_requeue(ctx, bot, t: int):
+async def _claim_unclaim_requeue(ctx, bot: User, t: int):
     """Claims, unclaims or requeues a bot, takes integer t with either 0 for claim, 1 for requeue (not yet done) or 2 for unclaim"""
     if t == 0:
         op = "Claim" # Action
@@ -120,3 +120,8 @@ async def _claim_unclaim_requeue(ctx, bot, t: int):
     await ctx.send(embed = embed)
     await _log(ctx, f"{bot.name}#{bot.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
 
+async def _approve_deny(ctx, bot: User, approve: bool):
+    if not bot.bot:
+        await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
+        return
+    approve_res = await _request("PATCH", f"/api/v2/bots/admin/{bot.id}/queue")
