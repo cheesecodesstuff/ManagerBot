@@ -8,12 +8,12 @@ class BotTesting(commands.Cog):
         self.bot = bot
 
     async def cog_check(self, ctx):
-        return await _cog_check(ctx, self.bot, ServerEnum.TEST_SERVER)
+        return await _cog_check(ctx, ServerEnum.TEST_SERVER)
 
     @commands.command(aliases=["q", "pending"])
     async def queue(self, ctx):
         """Get all bots in queue"""
-        queue = await _request("GET", ctx, self.bot, "/api/bots/admin/queue")
+        queue = await _request("GET", ctx, "/api/bots/admin/queue")
         queue_json = queue[1]
         embed = Embed(title = "Bots In Queue", description = "These are the bots in the Fates List Queue. Be sure to review them from top to bottom, ignoring Fates List bots")
         i = 1
@@ -27,10 +27,10 @@ class BotTesting(commands.Cog):
     @commands.command()
     async def claim(self, ctx, bot: User):
         """Claims a bot. This requires you to be staff and is checked on our API"""
-        return await _claim(ctx, self.bot, bot, 0)
+        return await _claim(ctx, bot, 0)
         
     @commands.command()
     async def unclaim(self, ctx, bot: User):
         """Unclaims a bot so other reviewers can test it"""
-        return await _claim(ctx, self.bot, bot, 2)
+        return await _claim(ctx, bot, 2)
     
