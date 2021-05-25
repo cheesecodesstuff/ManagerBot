@@ -14,7 +14,7 @@ class Staff(commands.Cog):
     
     @commands.command(aliases=["ias", "imstaff", "is"])
     async def iamstaff(self, ctx):
-        staff = is_staff(ctx, ctx.author.id, 2)
+        staff = _is_staff(ctx, ctx.author.id, 2)
         if not staff[0]:
             await ctx.author.send("You are not a Fates List Staff Member. You will hence be kicked from the staff server!")
             await ctx.author.kick()
