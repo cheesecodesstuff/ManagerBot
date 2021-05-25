@@ -77,6 +77,8 @@ async def _log(ctx, message):
                                    
 async def _cog_check(ctx, state: ServerEnum):
     """Creates a check for a cog"""
+    if ctx.message.content.lower().startswith(f"{ctx.prefix}help"):
+        return True # Avoid the spam that is "This command can only be run in the XYZ server"
     servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
     failed = []
     for k in ["testing", "staff"]:
