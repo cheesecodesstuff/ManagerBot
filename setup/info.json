@@ -1,0 +1,7 @@
+{
+	"min_python_version": [3, 8, 5],
+	"requirements": ["aiohttp_requests", "aiohttp", "orjson", "pydantic", "aenum"],
+	"author": ["Fates List"],
+	"description": "This is the setup cog for Fates List handling setup instructions",
+	"install_msg": "Run [p]setup to use this"
+}
