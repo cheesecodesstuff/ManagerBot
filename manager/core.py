@@ -132,5 +132,5 @@ async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
         op = "Approve"
     else:
         op = "Deny"
-    approve_res = await _request("PATCH", ctx, f"/api/v2/bots/admin/{bot.id}/queue", {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
+    approve_res = await _request("PATCH", ctx, f"/api/v2/bots/admin/{bot.id}/queue", json = {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
     return await _handle(ctx, bot, op, approve_res)
