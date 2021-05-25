@@ -19,7 +19,7 @@ async def _request(method, ctx, url, **kwargs):
         if fateslist_data.get(k) is None:
             failed.append(k)
     if failed:
-        await ctx.send(_token_missing(key = "fateslist", failed = failed))
+        await ctx.send(_tokens_missing(key = "fateslist", failed = failed))
         raise RequestFailed(" ".join(failed))
     if "headers" in kwargs.keys():
         headers = kwargs["headers"]
