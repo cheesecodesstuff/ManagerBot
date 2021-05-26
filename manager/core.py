@@ -117,14 +117,13 @@ async def _queue(ctx):
 async def _iamstaff(ctx):
     staff = await _is_staff(ctx, ctx.author.id, 2)
     if not staff[0]:
-    try:
-        msg = "You are not a Fates List Staff Member. You will hence be kicked from the staff server!"
-        await ctx.send(msg)
-        await ctx.author.send(msg)
-        await ctx.author.kick()
-        return
-    except:
-        await ctx.send("I've failed to kick this member. Staff, please kick this member now!")
+        try:
+            msg = "You are not a Fates List Staff Member. You will hence be kicked from the staff server!"
+            await ctx.send(msg)
+            await ctx.author.send(msg)
+            await ctx.author.kick()
+        except:
+            await ctx.send("I've failed to kick this member. Staff, please kick this member now!")
         return
     servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
     if not servers.get("ag_role"):
