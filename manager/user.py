@@ -29,7 +29,7 @@ class User(commands.Cog):
         for key in keys:
             role = key[0].replace('_', ' ').title()
             if not res[1][key[0]]:
-                embed.add_field(name = role, value = f":x: Not going to give you {role} because: {key[2]}")
+                embed.add_field(name = role, value = f":x: Not going to give you the {role} role because: *{key[2]}*")
                 failed += 1
                 continue
             servers = await _get(ctx, ctx.bot, [key[1]])
