@@ -232,3 +232,28 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
     op = "Ban" if ban else "Unban"
     ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": reason})
     return await _handle(ctx, bot, op, ban_res)
+
+async def _give_pending(ctx):
+    res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
+    if res[0] == 404:
+        await ctx.send("You have not even logged in even once on Fates List!")
+        return
+    
+    embed = Embed(title = "Roles Given", description = "These are the roles you have got")
+    
+    i = 1
+    success, failed = 0, 0
+    for key in [("bot_developer", "main_botdevrole", "You are not a bot developer"), ("certified_developer", "main_certdevrole", "You do not have any certified bots")]
+        role = key[0].replace('_', ' ').title()
+        if not res[1][key[0]]:
+            embed.add_field(name = role, value = f":X: Not going to give you {role} because: {key[2]}")
+            failed += 1
+            continue
+        servers = await _get(ctx, ctx.bot, [key[1]])
+        await ctx.author.add_roles(ctx.guild.get_role(servers.get(key[1])))
+        embed.add_field(name = role, value = f":white_checkmark: Gave you the {role} role")
+        success += 1
+        
+    embed.add_field(name = "Success", value = str(success))
+    embed.add_field(name = "Failed", value = str(failed))
+    await ctx.send(embed = embed)
