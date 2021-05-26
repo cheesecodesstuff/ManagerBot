@@ -34,7 +34,7 @@ class User(commands.Cog):
                 continue
             servers = await _get(ctx, ctx.bot, [key[1]])
             await ctx.author.add_roles(ctx.guild.get_role(servers.get(key[1])))
-            embed.add_field(name = role, value = f":white_checkmark: Gave you the {role} role")
+            embed.add_field(name = role, value = f":white_check_mark: Gave you the {role} role")
             success += 1
         
         embed.add_field(name = "Success", value = str(success))
