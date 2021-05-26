@@ -95,7 +95,24 @@ def _tokens_missing(failed, key = "fateslist-si"):
         type = "API Tokens"
         set = "manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL"
     return f"**Error**\nPlease set {type} using `[p]set api {key} {set}`\n\n**Failed**\n{' '.join(failed)}"
-    
+
+async def _get(inform, bot, lst, intify: bool = True):
+    servers = await bot.get_shared_api_tokens("fateslist-si")
+    failed = []
+    for key in lst:
+        if not servers.get(key):
+            failed.append(key)
+        else:
+            try:
+                if intify:
+                    servers[key] = int(servers[key])
+            except:
+                failed.append(key)
+    if failed:       
+        await inform.send(_tokens_missing(failed))
+        raise ValueError(f"Too many missing keys! ({failed})")
+    return servers
+
 async def _log(ctx, message):
     servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
     log_channel = servers.get("log_channel")
@@ -108,27 +125,20 @@ async def _cog_check(ctx, state: ServerEnum):
     """Creates a check for a cog"""
     if ctx.message.content.lower().startswith(f"{ctx.prefix}help"):
         return True # Avoid the spam that is "This command can only be run in the XYZ server"
-    servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
-    failed = []
-    for k in ["testing", "staff", "main"]:
-        if not servers.get(k):
-            failed.append(k)
-    if not servers or failed:
-        await ctx.send(_tokens_missing(failed))
-        return False
-    if state == ServerEnum.TEST_SERVER and ctx.guild.id != int(servers.get("testing")):
+    servers = await _get(ctx, ctx.bot, ["testing", "staff", "main"])
+    if state == ServerEnum.TEST_SERVER and ctx.guild.id != servers.get("testing"):
         embed = Embed(title = "Testing Server Only!", description = "This command can only be used on the testing server", color = Color.red())
         await ctx.send(embed = embed)
         return False
-    elif state == ServerEnum.STAFF_SERVER and ctx.guild.id != int(servers.get("staff")):
+    elif state == ServerEnum.STAFF_SERVER and ctx.guild.id != servers.get("staff"):
         embed = Embed(title = "Staff Server Only!", description = "This command can only be used on the staff server", color = Color.red())
         await ctx.send(embed = embed)
         return False
-    elif state == ServerEnum.MAIN_SERVER and ctx.guild.id != int(servers.get("main")):
+    elif state == ServerEnum.MAIN_SERVER and ctx.guild.id != servers.get("main"):
         embed = Embed(title = "Main Server Only!", description = "This command can only be used on the main server", color = Color.red())
         await ctx.send(embed = embed)
         return False
-    elif state == ServerEnum.TEST_STAFF_SERVER and (ctx.guild.id != int(servers.get("staff")) and ctx.guild.id != int(servers.get("testing"))):
+    elif state == ServerEnum.TEST_STAFF_SERVER and (ctx.guild.id != servers.get("staff") and ctx.guild.id != servers.get("testing")):
         embed = Embed(title = "Staff Or Testing Server Only!", description = "This command can only be used on the staff server or the testing server", color = Color.red())
         await ctx.send(embed = embed)
         return False  
@@ -222,20 +232,3 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
     op = "Ban" if ban else "Unban"
     ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": reason})
     return await _handle(ctx, bot, op, ban_res)
-
-async def _get(inform, bot, lst, intify: bool = True):
-    servers = await bot.get_shared_api_tokens("fateslist-si")
-    failed = []
-    for key in lst:
-        if not servers.get(key):
-            failed.append(key)
-        else:
-            try:
-                if intify:
-                    servers[key] = int(servers[key])
-            except:
-                failed.append(key)
-    if failed:       
-        await inform.send(_tokens_missing(failed))
-        raise ValueError(f"Too many missing keys! ({failed})")
-    return servers
