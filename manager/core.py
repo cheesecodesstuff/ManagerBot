@@ -53,6 +53,19 @@ class StaffMember(BaseModel):
     perm: int
     staff_id: Union[str, int]
 
+class MiniContext():
+    """Mini Context to satisy some commands"""
+    def __init__(self, member, bot):
+        self.author = member
+        self.bot = bot
+
+    async def send(self, *args, **kwargs):
+        return await self.author.send(*args, **kwargs)
+    async def kick(self, *args, **kwargs):
+        return await self.author.kick(*args, **kwargs)
+    async def ban(self, *args, **kwargs):
+        return await self.author.ban(*args, **kwargs)
+    
 class ServerEnum(IntEnum):
     TEST_SERVER = 0
     STAFF_SERVER = 1
