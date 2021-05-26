@@ -44,7 +44,6 @@ class Staff(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        await member.guild.owner.send("User joined")
         servers = await self.bot.get_shared_api_tokens("fateslist-si")
         failed = []
         for key in ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"]:
