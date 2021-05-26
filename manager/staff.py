@@ -42,9 +42,9 @@ class Staff(commands.Cog):
             pass
         await ctx.send("Unwhitelisted bot again")
 
-
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        print("User joined")
         servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
         failed = []
         for key in ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"]:
