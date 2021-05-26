@@ -44,7 +44,7 @@ class Staff(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        servers = await _get(member,guild.owner, self.bot, ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"])
+        servers = await _get(member.guild.owner, self.bot, ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"])
         if member.bot:
             if member.guild.id == servers.get("main"):
                 await member.add_roles(member.guild.get_role(servers.get("main_botsrole")))
