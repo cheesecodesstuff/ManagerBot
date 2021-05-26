@@ -50,10 +50,11 @@ class Staff(commands.Cog):
         for key in ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"]:
             if not servers.get(key):
                 failed.append(key)
-            try:
-                servers[key] = int(servers[key])
-            except:
-                failed.append(key)
+            else:
+                try:
+                    servers[key] = int(servers[key])
+                except:
+                    failed.append(key)
         if failed:       
             await member.guild.owner.send(_tokens_missing(failed))
             return
