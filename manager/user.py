@@ -12,9 +12,10 @@ class User(commands.Cog):
     async def cog_check(self, ctx): 
         return await _cog_check(ctx, ServerEnum.MAIN_SERVER)
 
-    @commands.command()
-    async def botdev(self, ctx):
+    @commands.command(aliases=["botdev", "certdev", "giveroles"])
+    async def roles(self, ctx):
         """Gives bot devs the Bot Developer role"""
+        
         res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
         if res[0] == 404:
             await ctx.send("You have not even logged in even once on Fates List!")
@@ -28,7 +29,7 @@ class User(commands.Cog):
         for key in keys:
             role = key[0].replace('_', ' ').title()
             if not res[1][key[0]]:
-                embed.add_field(name = role, value = f":X: Not going to give you {role} because: {key[2]}")
+                embed.add_field(name = role, value = f":x: Not going to give you {role} because: {key[2]}")
                 failed += 1
                 continue
             servers = await _get(ctx, ctx.bot, [key[1]])
