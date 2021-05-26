@@ -36,6 +36,9 @@ async def _request(method, ctx, url, **kwargs):
     elif res.status == 429:
         await ctx.send("**Request Failed**\nThis bot is being ratelimited by the Fates List API. Is your ratelimit bypass key correct?")
         raise RequestFailed("Ratelimited")
+    elif res.status == 500:
+        await ctx.send("**Request Failed**\nThis API Endpoint returned a 500 (Internal Server Error). Please ask for support on the staff server, pinging the owners")
+        raise RequestFailed(f"Internal Server Error at {url}")
     res_json = await res.json()
     return res.status, res_json
    
