@@ -1,4 +1,4 @@
-from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing, _ban_unban, _iamstaff, MiniContext
+from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing, _ban_unban, _iamstaff, _get, MiniContext
 from redbot.core import commands
 from discord import Embed, User, Color
 from http import HTTPStatus
@@ -44,19 +44,7 @@ class Staff(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        servers = await self.bot.get_shared_api_tokens("fateslist-si")
-        failed = []
-        for key in ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"]:
-            if not servers.get(key):
-                failed.append(key)
-            else:
-                try:
-                    servers[key] = int(servers[key])
-                except:
-                    failed.append(key)
-        if failed:       
-            await member.guild.owner.send(_tokens_missing(failed))
-            return
+        servers = await _get(member,guild.owner, self.bot, ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"])
         if member.bot:
             if member.guild.id == servers.get("main"):
                 await member.add_roles(member.guild.get_role(servers.get("main_botsrole")))
