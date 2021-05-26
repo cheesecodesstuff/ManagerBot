@@ -10,7 +10,7 @@ from typing import Optional, Union
 
 class RequestFailed(Exception):
     def __init__(self, string):
-        super.__init__(string)
+        super().__init__(string)
 
 async def _request(method, ctx, url, **kwargs):
     fateslist_data = await ctx.bot.get_shared_api_tokens("fateslist")
@@ -33,6 +33,9 @@ async def _request(method, ctx, url, **kwargs):
     if res.status == 401:
         await ctx.send("**Request Failed**\nGiven API Keys are invalid! nPlease set the needed keys using `[p]set api fateslist manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL`")
         raise RequestFailed("Invalid API Keys")
+    elif res.status == 429:
+        await ctx.send("**Request Failed**\nThis bot is being ratelimited by the Fates List API. Is your ratelimit bypass key correct?")
+        raise RequestFailed("Ratelimited")
     res_json = await res.json()
     return res.status, res_json
    
