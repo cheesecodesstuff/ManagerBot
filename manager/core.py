@@ -90,7 +90,7 @@ async def _is_staff(ctx, user_id: int, min_perm: int = 2):
 def _tokens_missing(failed, key = "fateslist-si"): 
     if key == "fateslist-si":
         type = "server info"
-        set = "testing,TESTING_SERVER_ID staff,STAFF_SERVER_ID log_channel,STAFF_LOGCHANNEL ag_role,STAFF_SERVER_GRANTED_ROLE main,MAIN_SERVER_ID test_botsrole,TEST_SERVER_BOTSROLE main_botsrole,MAIN_SERVER_BOTSROLE test_staffrole,TEST_SERVER_STAFFROLE"
+        set = "testing,TESTING_SERVER_ID staff,STAFF_SERVER_ID log_channel,STAFF_LOGCHANNEL ag_role,STAFF_SERVER_GRANTED_ROLE main,MAIN_SERVER_ID test_botsrole,TEST_SERVER_BOTSROLE main_botsrole,MAIN_SERVER_BOTSROLE test_staffrole,TEST_SERVER_STAFFROLE main_botdevrole,MAIN_SERVER_BOTDEVROLE main_certdevrole,MAIN_SERVER_CERTDEVROLE"
     elif key == "fateslist":
         type = "API Tokens"
         set = "manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL"
