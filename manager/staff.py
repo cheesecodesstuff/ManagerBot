@@ -29,7 +29,7 @@ class Staff(commands.Cog):
         return await _ban_unban(ctx, bot, "", False)
 
     @commands.command()
-    async def whitelist(self, ctx, bot: User):
+    async def allowbot(self, ctx, bot: User):
         staff = await _is_staff(ctx, ctx.author.id, 4)
         if not staff[0]:
             return await ctx.send("You cannot temporarily whitelist this member as you are not an admin")
