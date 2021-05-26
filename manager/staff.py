@@ -1,4 +1,4 @@
-from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing, _ban_unban, _iamstaff
+from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing, _ban_unban, _iamstaff, MiniContext
 from redbot.core import commands
 from discord import Embed, User, Color
 from http import HTTPStatus
@@ -60,8 +60,10 @@ class Staff(commands.Cog):
         if member.bot:
             if member.guild.id == servers.get("main"):
                 await member.add_roles(member.guild.get_role(servers.get("main_botsrole")))
+                await _log(MiniContext(member, self.bot), f"Bot {member.name}#{member.discriminator} has joined the main server, hopefully after being properly tested...")
             elif member.guild.id == servers.get("testing"):
                 await member.add_roles(member.guild.get_role(servers.get("test_botsrole")))
+                await _log(MiniContext(member, self.bot), f"Bot {member.name}#{member.discriminator} has joined the testing server, good luck...")
             elif not self.whitelist.get(member.id) and member.guild.id == servers.get("staff"):
                 await member.kick(reason = "Unauthorized Bot")
             else:
