@@ -18,7 +18,8 @@ class User(commands.Cog):
         
         res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
         if res[0] == 404:
-            await ctx.send("You have not even logged in even once on Fates List!")
+            embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
+            await ctx.send(embed = embed)
             return
     
         embed = Embed(title = "Roles Given", description = "These are the roles you have got on Fates List", color = Color.blue())
