@@ -56,7 +56,9 @@ class StaffMember(BaseModel):
 class ServerEnum(IntEnum):
     TEST_SERVER = 0
     STAFF_SERVER = 1
-    COMMON = 2
+    MAIN_SERVER = 2
+    TEST_STAFF_SERVER = 3
+    COMMON = 4
 
 class Status(IntEnum):
     """Status object (See https://docs.fateslist.xyz/basics/basic-structures#status for more information)"""
@@ -95,7 +97,7 @@ async def _cog_check(ctx, state: ServerEnum):
         return True # Avoid the spam that is "This command can only be run in the XYZ server"
     servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
     failed = []
-    for k in ["testing", "staff"]:
+    for k in ["testing", "staff", "main"]:
         if not servers.get(k):
             failed.append(k)
     if not servers or failed:
@@ -109,6 +111,14 @@ async def _cog_check(ctx, state: ServerEnum):
         embed = Embed(title = "Staff Server Only!", description = "This command can only be used on the staff server", color = Color.red())
         await ctx.send(embed = embed)
         return False
+    elif state == ServerEnum.MAIN_SERVER and ctx.guild.id != int(servers.get("main")):
+        embed = Embed(title = "Main Server Only!", description = "This command can only be used on the main server", color = Color.red())
+        await ctx.send(embed = embed)
+        return False
+    elif state == ServerEnum.TEST_STAFF_SERVER and (ctx.guild.id != int(servers.get("staff")) and ctx.guild.id != int(servers.get("testing"))):
+        embed = Embed(title = "Staff Or Testing Server Only!", description = "This command can only be used on the staff server or the testing server", color = Color.red())
+        await ctx.send(embed = embed)
+        return False  
     return True
 
 async def _queue(ctx):
