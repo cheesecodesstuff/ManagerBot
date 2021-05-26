@@ -21,7 +21,7 @@ class User(commands.Cog):
             await ctx.send("You have not even logged in even once on Fates List!")
             return
     
-        embed = Embed(title = "Roles Given", description = "These are the roles you have got", color = Color.blue())
+        embed = Embed(title = "Roles Given", description = "These are the roles you have got on Fates List", color = Color.blue())
     
         i = 1
         success, failed = 0, 0
