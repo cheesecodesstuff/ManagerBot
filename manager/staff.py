@@ -50,19 +50,24 @@ class Staff(commands.Cog):
         for key in ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"]:
             if not servers.get(key):
                 failed.append(key)
+            try:
+                servers[key] = int(servers[key])
+            except:
+                failed.append(key)
         if failed:       
             await member.guild.owner.send(_tokens_missing(failed))
             return
         if member.bot:
             if member.guild.id == servers.get("main"):
                 await member.add_roles(member.guild.get_role(servers.get("main_botsrole")))
-            elif member.guild.id == test_server:
-                await member.add_roles(member.guild.get_role(test_botsrole))
-            elif not self.whitelist.get(member.id):
+            elif member.guild.id == servers.get("testing"):
+                await member.add_roles(member.guild.get_role(servers.get("test_botsrole")))
+            elif not self.whitelist.get(member.id) and member.guild.id == servers.get("staff"):
                 await member.kick(reason = "Unauthorized Bot")
             else:
                 del self.whitelist[member.id]
         else:
-            staff = is_staff(staff_roles, client.get_guild(main_server).get_member(member.id).roles, 2)
-            if staff[0]:
-                await member.add_roles(member.guild.get_role(test_staffrole))
+            if member.guild.id == servers.get("testing"):
+                staff = await _is_staff(ctx, member.id, 2)
+                if staff[0]:
+                    await member.add_roles(member.guild.get_role(servers.get("test_staffrole")))
