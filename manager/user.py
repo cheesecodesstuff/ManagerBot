@@ -15,7 +15,7 @@ class User(commands.Cog):
     @commands.command()
     async def botdev(self, ctx):
         """Gives you the Bot Developer role"""
-        res = _request("GET", ctx, f"/api/users/{ctx.author.id}")
+        res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
         if res[0] == 404:
             await ctx.send("You have not even logged in even once on Fates List!")
             return
