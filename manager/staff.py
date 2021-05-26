@@ -45,9 +45,17 @@ class Staff(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
+        servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
+        failed = []
+        for key in ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"]:
+            if not servers.get(key):
+                failed.append(key)
+        if failed:       
+            await member.guild.owner.send(_tokens_missing(failed))
+            return
         if member.bot:
-            if member.guild.id == main_server:
-                await member.add_roles(member.guild.get_role(self.client.bots_role))
+            if member.guild.id == servers.get("main"):
+                await member.add_roles(member.guild.get_role(servers.get("main_botsrole")))
             elif member.guild.id == test_server:
                 await member.add_roles(member.guild.get_role(test_botsrole))
             elif not self.whitelist.get(member.id):
