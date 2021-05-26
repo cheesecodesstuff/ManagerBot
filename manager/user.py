@@ -24,7 +24,8 @@ class User(commands.Cog):
     
         i = 1
         success, failed = 0, 0
-        for key in [("bot_developer", "main_botdevrole", "You are not a bot developer"), ("certified_developer", "main_certdevrole", "You do not have any certified bots")]
+        keys = (("bot_developer", "main_botdevrole", "You are not a bot developer"), ("certified_developer", "main_certdevrole", "You do not have any certified bots"))  # keep comment here for github
+        for key in keys:
             role = key[0].replace('_', ' ').title()
             if not res[1][key[0]]:
                 embed.add_field(name = role, value = f":X: Not going to give you {role} because: {key[2]}")
