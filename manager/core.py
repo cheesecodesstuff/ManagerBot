@@ -225,16 +225,17 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
 
 async def _get(inform, bot, lst, intify: bool = True):
     servers = await bot.get_shared_api_tokens("fateslist-si")
-        failed = []
-        for key in lst:
-            if not servers.get(key):
+    failed = []
+    for key in lst:
+        if not servers.get(key):
+            failed.append(key)
+        else:
+            try:
+                if intify:
+                    servers[key] = int(servers[key])
+            except:
                 failed.append(key)
-            else:
-                try:
-                    if intify:
-                        servers[key] = int(servers[key])
-                except:
-                    failed.append(key)
-        if failed:       
-            await inform.send(_tokens_missing(failed))
-            return
+    if failed:       
+        await inform.send(_tokens_missing(failed))
+        raise ValueError(f"Too many missing keys! ({failed})")
+    return servers
