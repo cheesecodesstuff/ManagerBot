@@ -169,24 +169,28 @@ async def _handle(ctx, target: User, op: str, res: dict, succ = "Feel free to re
     opt = op
     if op.endswith("n"):
         op += "n" # Double n
+    elif op.endswith("e"):
+        op = op[:-1]
+    elif op.endswith("y"):
+        op = op.replace("y", "i")
     if not res[1]["done"]:
-        embed = Embed(title = f"{opt} Failed", description = f"This bot could not be {op.replace('y', 'i').lower()}ed by you...", color = Color.red())
+        embed = Embed(title = f"{opt} Failed", description = f"This bot could not be {op.lower()}ed by you...", color = Color.red())
         embed.add_field(name = "Reason", value = res[1]["reason"])
         embed.add_field(name = "Status Code", value = f"{res[0]} ({HTTPStatus(res[0]).phrase})")
         await ctx.send(embed = embed)
         return
-    embed = Embed(title = f"{op.replace('y', 'i')}ed", description = f"This bot has been {op.replace('y', 'i').lower()}ed. {succ}. This is important")
+    embed = Embed(title = f"{op}ed", description = f"This bot has been {op.lower()}ed. {succ}. This is important")
     if res[1]["reason"]:
         embed.add_field(name = "Additional", value = res[1]["reason"])
     embed.add_field(name = "Status Code", value = f"{res[0]} ({HTTPStatus(res[0]).phrase})")
     await ctx.send(embed = embed)
-    await _log(ctx, f"{target.name}#{target.discriminator} has been {op.replace('y', 'i').lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
+    await _log(ctx, f"{target.name}#{target.discriminator} has been {op.lower()}ed by {ctx.author.name}#{ctx.author.discriminator} ({ctx.author.id})")
     if kick:
         member = ctx.guild.get_member(target.id)
         if member.top_role.position >= ctx.me.top_role.position:
             await ctx.send("I could not kick this member as they have a higher role than me.")
             return
-        await member.kick(reason = f"Kicked as bot {op.replace('y', 'i').lower()}ed")
+        await member.kick(reason = f"Kicked as bot {op.lower()}ed")
        
 # TODO: Put this in core as it will be used in other places
 async def _claim_unclaim_requeue(ctx, bot: User, t: int):
