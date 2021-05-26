@@ -14,14 +14,28 @@ class User(commands.Cog):
 
     @commands.command()
     async def botdev(self, ctx):
-        """Gives you the Bot Developer role"""
+        """Gives bot devs the Bot Developer role"""
         res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
         if res[0] == 404:
-            await ctx.send("You have not even logged in even once on Fates List!")
+            await ctx.send("You have not logged in even once on Fates List!")
             return
         if not res[1]["bot_developer"]:
             await ctx.send("You have no eligible bots (your bot is not verified and/or does not belong to you as a owner or extra owner)")
             return
         servers = await _get(ctx, ctx.bot, ["main_botdevrole"])
         await ctx.author.add_roles(ctx.guild.get_role(servers.get("main_botdevrole")))
+        return await ctx.send("Gave you the role!")
+
+    @commands.command()
+    async def botdev(self, ctx):
+        """Gives certified devs the Certified Developer role"""
+        res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
+        if res[0] == 404:
+            await ctx.send("You have not even logged in even once on Fates List!")
+            return
+        if not res[1]["certified_developer"]:
+            await ctx.send("You have no eligible bots (your bot is not certified and/or does not belong to you as a owner or extra owner)")
+            return
+        servers = await _get(ctx, ctx.bot, ["main_certdevrole"])
+        await ctx.author.add_roles(ctx.guild.get_role(servers.get("main_certdevrole")))
         return await ctx.send("Gave you the role!")
