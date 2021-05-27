@@ -61,4 +61,4 @@ class User(commands.Cog):
         embed.add_field(name = "Discriminator/Tag", value = profile['disc'])
         embed.add_field(name = "Avatar", value = profile['avatar'])
         embed.add_field(name = "Defunct", value = profile['defunct'])
-        embed.add_field(name = "Status", value = profile['status'])
+        embed.add_field(name = "Status", value = f"{profile['status']} ({UserState(profile['status']).__doc__})")
