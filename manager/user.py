@@ -72,3 +72,5 @@ class User(commands.Cog):
         embed.add_field(name = "Avatar", value = profile['avatar'])
         embed.add_field(name = "Defunct", value = profile['defunct'])
         embed.add_field(name = "Status", value = f"{profile['status']} ({UserState(profile['status']).__doc__})")
+    
+        await ctx.send(embed = embed)
