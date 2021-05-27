@@ -57,11 +57,16 @@ class User(commands.Cog):
         if not profile:
             return
         embed = Embed(title = f"{target}'s Profile", description = "Here is your profile")
+        
+        # Base fields
         embed.add_field(name = "User ID", value = profile['id'])
         embed.add_field(name = "Username", value = profile['username'])
         embed.add_field(name = "Discriminator/Tag", value = profile['disc'])
         embed.add_field(name = "Avatar", value = profile['avatar'])
+        embed.add_field(name = "Description" value = profile['profile']['description'])
         embed.add_field(name = "Defunct", value = profile['defunct'])
         embed.add_field(name = "Status", value = f"{profile['status']} ({Status(profile['status']).__doc__})")
         embed.add_field(name = "State", value = f"{profile['profile']['state']} ({UserState(profile['profile']['state']).__doc__})")
+        embed.add_field(name = "CSS" value = profile['profile']['css'])
+        
         await ctx.send(embed = embed)
