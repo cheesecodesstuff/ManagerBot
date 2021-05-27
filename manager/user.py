@@ -14,7 +14,7 @@ class User(commands.Cog):
 
     @commands.command(aliases=["botdev", "certdev", "giveroles"])
     async def roles(self, ctx):
-        """Gives bot devs the Bot Developer role"""
+        """Gives bot devs their roles"""
         
         res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
         if res[0] == 404:
@@ -41,3 +41,10 @@ class User(commands.Cog):
         embed.add_field(name = "Success", value = str(success))
         embed.add_field(name = "Failed", value = str(failed))
         await ctx.send(embed = embed)
+
+    @commands.command()
+    async def catid(self, ctx):
+        """Returns the category ID of a channel"""
+        if ctx.channel.category: 
+            return await ctx.send(str(ctx.channel.category.id)) 
+        return await ctx.send("No category attached to this channel")  
