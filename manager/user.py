@@ -1,6 +1,6 @@
 from .core import _cog_check, _request, _get, _profile, ServerEnum, Status
 from redbot.core import commands
-from discord import Embed, User, Color
+from discord import Embed, User, Color, Member
 from http import HTTPStatus
 from typing import Optional
 
@@ -15,10 +15,13 @@ class User(commands.Cog):
         return await _cog_check(ctx, ServerEnum.COMMON)
 
     @commands.command(aliases=["botdev", "certdev", "giveroles"])
-    async def roles(self, ctx):
+    async def roles(self, ctx, target: Optional[Member] = None):
         """Gives bot devs their roles. **MAIN SERVER ONLY**"""
-        
-        res = await _profile(ctx, ctx.author.id)
+        target = target if target else ctx.author
+        if target.bot:
+            embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
+            await ctx.send(embed = embed)
+        res = await _profile(ctx, target.id)
         if res[0] == 404:
             embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
             await ctx.send(embed = embed)
@@ -36,7 +39,7 @@ class User(commands.Cog):
                 failed += 1
                 continue
             servers = await _get(ctx, ctx.bot, [key[1]])
-            await ctx.author.add_roles(ctx.guild.get_role(servers.get(key[1])))
+            await target.add_roles(ctx.guild.get_role(servers.get(key[1])))
             embed.add_field(name = role, value = f":white_check_mark: Gave you the {role} role")
             success += 1
         
@@ -54,8 +57,14 @@ class User(commands.Cog):
     @commands.command()
     async def profile(self, ctx, user: Optional[User] = None):
         target = user if user else ctx.author
+        if target.bot:
+            embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
+            await ctx.send(embed = embed)
         profile = await _profile(ctx, target.id)
-        embed = Embed(title = f"{target.user}'s Profile", description = "Here is your profile")
+        if res[0] == 404:
+            embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
+            await ctx.send(embed = embed)
+        embed = Embed(title = f"{target}'s Profile", description = "Here is your profile")
         embed.add_field(name = "User ID", value = profile['id'])
         embed.add_field(name = "Username", value = profile['username'])
         embed.add_field(name = "Discriminator/Tag", value = profile['disc'])
