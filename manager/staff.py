@@ -45,6 +45,14 @@ class Staff(commands.Cog):
         await ctx.send("Unwhitelisted bot again")
 
     @commands.Cog.listener()
+    async def on_message(self, message):
+        # Anti log spam
+        servers = await _get(message.guild.owner, self.bot, ["log_channel"])
+        log_channel = servers.get("log_channel")
+        if message.author.id != message.guild.me.id and message.channel.id == log_channel:
+            await message.delete()
+
+    @commands.Cog.listener()
     async def on_member_join(self, member):
         servers = await _get(member.guild.owner, self.bot, ["staff", "testing", "test_botsrole", "test_staffrole", "main", "main_botsrole"])
         if member.bot:
