@@ -60,6 +60,7 @@ class MiniContext():
     def __init__(self, member, bot):
         self.author = member
         self.bot = bot
+        self.guild = member.guild
 
     async def send(self, *args, **kwargs):
         return await self.author.send(*args, **kwargs)
@@ -127,11 +128,9 @@ async def _get(inform, bot, lst, intify: bool = True):
     return servers
 
 async def _log(ctx, message):
-    servers = await ctx.bot.get_shared_api_tokens("fateslist-si")
-    log_channel = servers.get("log_channel")
-    if not log_channel:
-        await ctx.send(_tokens_missing(["log_channel"]))                                                              
-    channel = ctx.bot.get_channel(int(log_channel))
+    servers = await _get(ctx.guild.owner, ctx.bot, ["log_channel"])
+    log_channel = servers.get("log_channel")                                                   
+    channel = ctx.bot.get_channel(log_channel)
     await channel.send(message)                 
 
 async def _cog_check(ctx, state: ServerEnum):
