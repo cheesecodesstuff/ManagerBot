@@ -134,7 +134,7 @@ async def _log(ctx, message):
                                    
 async def _cog_check(ctx, state: ServerEnum):
     """Creates a check for a cog"""
-    if ctx.message.content.lower().startswith("help"):
+    if ctx.message.content.lower().startswith(f"{ctx.prefix}help"):
         return True # Avoid the spam that is "This command can only be run in the XYZ server"
     servers = await _get(ctx, ctx.bot, ["testing", "staff", "main"])
     if state == ServerEnum.TEST_SERVER and ctx.guild.id != servers.get("testing"):
