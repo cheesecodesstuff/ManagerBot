@@ -131,28 +131,24 @@ async def _log(ctx, message):
         await ctx.send(_tokens_missing(["log_channel"]))                                                              
     channel = ctx.bot.get_channel(int(log_channel))
     await channel.send(message)                 
-                                   
+
 async def _cog_check(ctx, state: ServerEnum):
     """Creates a check for a cog"""
     if ctx.message.content.lower().startswith(f"{ctx.prefix}help"):
         return True # Avoid the spam that is "This command can only be run in the XYZ server"
     servers = await _get(ctx, ctx.bot, ["testing", "staff", "main"])
+    embed = None
     if state == ServerEnum.TEST_SERVER and ctx.guild.id != servers.get("testing"):
         embed = Embed(title = "Testing Server Only!", description = "This command can only be used on the testing server", color = Color.red())
-        await ctx.send(embed = embed)
-        return False
     elif state == ServerEnum.STAFF_SERVER and ctx.guild.id != servers.get("staff"):
         embed = Embed(title = "Staff Server Only!", description = "This command can only be used on the staff server", color = Color.red())
-        await ctx.send(embed = embed)
-        return False
     elif state == ServerEnum.MAIN_SERVER and ctx.guild.id != servers.get("main"):
         embed = Embed(title = "Main Server Only!", description = "This command can only be used on the main server", color = Color.red())
-        await ctx.send(embed = embed)
-        return False
     elif state == ServerEnum.TEST_STAFF_SERVER and (ctx.guild.id != servers.get("staff") and ctx.guild.id != servers.get("testing")):
         embed = Embed(title = "Staff Or Testing Server Only!", description = "This command can only be used on the staff server or the testing server", color = Color.red())
+    if embed:
         await ctx.send(embed = embed)
-        return False  
+        return False
     return True
 
 async def _queue(ctx):
