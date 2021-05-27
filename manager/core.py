@@ -162,7 +162,7 @@ async def _queue(ctx):
     embeds = [] # List of queue bot embeds
     i = 1
     for bot in queue_json["bots"]:
-        if i % 3 == 1:
+        if i % 5 == 1:
             embed = deepcopy(base_embed)
             embeds.append(embed)
         embed.insert_field_at(0, name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
@@ -171,7 +171,7 @@ async def _queue(ctx):
         embed = deepcopy(base_embed)
         embed.insert_field_at(0, name = "No Bots In Queue!", value = "There are no bots in queue! Just relax :)")
         return await ctx.send(embed = embed)
-    return await menu(ctx, embeds, {"⏮️": prev_page, "❌": close_menu, "⏭️": next_page})
+    return await menu(ctx, embeds, {"⏮️": prev_page, "❌": close_menu, "⏭️": next_page}, timeout = 45)
 
 async def _iamstaff(ctx):
     staff = await _is_staff(ctx, ctx.author.id, 2)
