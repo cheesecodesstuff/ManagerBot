@@ -1,4 +1,4 @@
-from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing, _ban_unban, _iamstaff, _get, MiniContext
+from .core import ServerEnum, _is_staff, _cog_check, _tokens_missing, _ban_unban, _iamstaff, _get, _log, MiniContext
 from redbot.core import commands
 from discord import Embed, User, Color
 from http import HTTPStatus
