@@ -56,6 +56,7 @@ class User(commands.Cog):
 
     @commands.command()
     async def profile(self, ctx, user: Optional[User] = None):
+        """Gets a users profile (Not yet done)"""
         target = user if user else ctx.author
         if target.bot:
             embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
