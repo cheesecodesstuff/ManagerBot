@@ -1,4 +1,4 @@
-from .core import _cog_check, _request, _get, ServerEnum, Status
+from .core import _cog_check, _request, _get, _profile, ServerEnum, Status
 from redbot.core import commands
 from discord import Embed, User, Color
 from http import HTTPStatus
@@ -10,11 +10,13 @@ class User(commands.Cog):
         self.bot = bot
     
     async def cog_check(self, ctx):
-        return await _cog_check(ctx, ServerEnum.MAIN_SERVER) 
+        if ctx.command.name in ("roles",):
+            return await _cog_check(ctx, ServerEnum.MAIN_SERVER)
+        return await _cog_check(ctx, ServerEnum.COMMON)
 
     @commands.command(aliases=["botdev", "certdev", "giveroles"])
     async def roles(self, ctx):
-        """Gives bot devs their roles"""
+        """Gives bot devs their roles. **MAIN SERVER ONLY**"""
         
         res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
         if res[0] == 404:
@@ -48,3 +50,9 @@ class User(commands.Cog):
         if ctx.channel.category: 
             return await ctx.send(str(ctx.channel.category.id)) 
         return await ctx.send("No category attached to this channel")  
+
+    @commands.command()
+    async def profile(self, ctx, user: Optional[User] = None):
+        target = user if user else ctx.author
+        profile = await _profile(ctx, target)
+        embed = Embed(title = f"{target.user}'s Profile", description = "Here is your profile")
