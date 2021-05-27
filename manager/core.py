@@ -65,7 +65,8 @@ class MiniContext():
         return await self.author.kick(*args, **kwargs)
     async def ban(self, *args, **kwargs):
         return await self.author.ban(*args, **kwargs)
-    
+
+# Update with latest fates code
 class ServerEnum(IntEnum):
     TEST_SERVER = 0
     STAFF_SERVER = 1
@@ -82,6 +83,16 @@ class Status(IntEnum):
     idle = 3, "Idle"
     dnd = 4, "Do Not Disturb"
 
+class UserState(IntEnum):
+    _init_ = 'value __doc__'
+    normal = 0, "Normal"
+    global_ban = 1, "Global Ban"
+    login_ban = 2, "Login Ban"
+    pedit_ban = 3, "Profile Edit Ban"
+    ddr_ban = 4, "Data Deletion Request Ban"
+    
+# end Fates code
+    
 async def _is_staff(ctx, user_id: int, min_perm: int = 2):
     res = await _request("GET", ctx, f"/api/admin/is_staff?user_id={user_id}&min_perm={min_perm}")
     res = res[1]
