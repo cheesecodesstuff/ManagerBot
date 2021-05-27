@@ -67,6 +67,6 @@ class User(commands.Cog):
         embed.add_field(name = "Defunct", value = profile['defunct'])
         embed.add_field(name = "Status", value = f"{profile['status']} ({Status(profile['status']).__doc__})")
         embed.add_field(name = "State", value = f"{profile['profile']['state']} ({UserState(profile['profile']['state']).__doc__})")
-        embed.add_field(name = "CSS", value = profile['profile']['css'])
+        embed.add_field(name = "CSS", value = profile['profile']['css'] if profile['profile']['css'] else "No custom user CSS set")
         
         await ctx.send(embed = embed)
