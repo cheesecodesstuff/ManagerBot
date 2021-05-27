@@ -71,6 +71,6 @@ class User(commands.Cog):
         embed.add_field(name = "Discriminator/Tag", value = profile['disc'])
         embed.add_field(name = "Avatar", value = profile['avatar'])
         embed.add_field(name = "Defunct", value = profile['defunct'])
-        embed.add_field(name = "Status", value = f"{profile['status']} ({UserState(profile['status']).__doc__})")
-    
+        embed.add_field(name = "Status", value = f"{profile['status']} ({Status(profile['status']).__doc__})")
+        embed.add_field(name = "State", value = f"{profile['profile']['state']} ({UserState(profile['profile']['state']).__doc__})")
         await ctx.send(embed = embed)
