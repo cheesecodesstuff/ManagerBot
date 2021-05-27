@@ -171,7 +171,7 @@ async def _queue(ctx):
         embed = deepcopy(base_embed)
         embed.insert_field_at(0, name = "No Bots In Queue!", value = "There are no bots in queue! Just relax :)")
         return await ctx.send(embed = embed)
-    return await menu(ctx, embeds, {":x:": close_menu, ":track_next:": next_page, ":track_previous:": prev_page})
+    return await menu(ctx, embeds, {"⏮️": prev_page, "❌": close_menu, "⏭️": next_page})
 
 async def _iamstaff(ctx):
     staff = await _is_staff(ctx, ctx.author.id, 2)
