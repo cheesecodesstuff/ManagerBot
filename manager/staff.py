@@ -50,10 +50,10 @@ class Staff(commands.Cog):
         if member.bot:
             if member.guild.id == servers.get("main"):
                 await member.add_roles(member.guild.get_role(servers.get("main_botsrole")))
-                await _log(MiniContext(member, self.bot), f"Bot {member.name}#{member.discriminator} has joined the main server, hopefully after being properly tested...")
+                await _log(MiniContext(member, self.bot), f"Bot **{member.name}#{member.discriminator}** has joined the main server, hopefully after being properly tested...")
             elif member.guild.id == servers.get("testing"):
                 await member.add_roles(member.guild.get_role(servers.get("test_botsrole")))
-                await _log(MiniContext(member, self.bot), f"Bot {member.name}#{member.discriminator} has joined the testing server, good luck...")
+                await _log(MiniContext(member, self.bot), f"Bot **{member.name}#{member.discriminator}** has joined the testing server, good luck...")
             elif not self.whitelist.get(member.id) and member.guild.id == servers.get("staff"):
                 await member.kick(reason = "Unauthorized Bot")
             else:
