@@ -15,8 +15,8 @@ class Staff(commands.Cog):
         return await _cog_check(ctx, ServerEnum.STAFF_SERVER)
     
     @commands.command(aliases=["ias", "imstaff", "is"])
-    """Shhhh... Secret staff command to gain access to the staff server"""
     async def iamstaff(self, ctx):
+        """Shhhh... Secret staff command to gain access to the staff server"""
         return await _iamstaff(ctx)
 
     @commands.command()
