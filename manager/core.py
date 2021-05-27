@@ -7,6 +7,8 @@ from aenum import IntEnum
 from discord import Embed, User, Color
 from http import HTTPStatus
 from typing import Optional, Union
+from redbot.core.utils.menus import menu, prev_page, next_page, close_menu
+from copy import deepcopy
 
 class RequestFailed(Exception):
     def __init__(self, string):
@@ -154,14 +156,18 @@ async def _cog_check(ctx, state: ServerEnum):
 async def _queue(ctx):
     queue = await _request("GET", ctx, "/api/bots/admin/queue")
     queue_json = queue[1]
-    embed = Embed(title = "Bots In Queue", description = "These are the bots in the Fates List Queue. Be sure to review them from top to bottom, ignoring Fates List bots")
+    base_embed = Embed(title = "Bots In Queue", description = "These are the bots in the Fates List Queue. Be sure to review them from top to bottom, ignoring Fates List bots")
+    base_embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
     i = 1
     for bot in queue_json["bots"]:
+        if i % 3 == 1:
+            embed = deepcopy(base_embed)
+            embeds.append(embed)
         embed.add_field(name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
         i += 1
-    embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
+    baae_embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
     embed.set_thumbnail(url = str(ctx.guild.icon_url))
-    return await ctx.send(embed = embed)
+    return await menu(ctx, embeds, {":x:": close_menu, ":track_next:": next_page, ":track_previous:": prev_page})
 
 async def _iamstaff(ctx):
     staff = await _is_staff(ctx, ctx.author.id, 2)
