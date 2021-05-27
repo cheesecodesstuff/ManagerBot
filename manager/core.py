@@ -240,5 +240,15 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
     ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": reason})
     return await _handle(ctx, bot, op, ban_res)
 
-async def _profile(ctx, user_id):
-    return await _request("GET", ctx, f"/api/users/{user_id}")
+async def _profile(ctx, user):
+    """Gets the users profile, sends a message and returns None if not found"""
+    if target.bot:
+        embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
+        await ctx.send(embed = embed)
+        return None
+    res = await _request("GET", ctx, f"/api/users/{user.id}")
+    if res[0] == 404:
+        embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
+        await ctx.send(embed = embed)
+        return None
+    return res[1]
