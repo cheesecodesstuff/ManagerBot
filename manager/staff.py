@@ -15,6 +15,7 @@ class Staff(commands.Cog):
         return await _cog_check(ctx, ServerEnum.STAFF_SERVER)
     
     @commands.command(aliases=["ias", "imstaff", "is"])
+    """Shhhh... Secret staff command to gain access to the staff server"""
     async def iamstaff(self, ctx):
         return await _iamstaff(ctx)
 
@@ -30,6 +31,7 @@ class Staff(commands.Cog):
 
     @commands.command()
     async def allowbot(self, ctx, bot: User):
+        """Shhhhh.... secret command to allow adding a bot to the staff server"""
         staff = await _is_staff(ctx, ctx.author.id, 4)
         if not staff[0]:
             return await ctx.send("You cannot temporarily whitelist this member as you are not an admin")
