@@ -165,8 +165,12 @@ async def _queue(ctx):
         if i % 3 == 1:
             embed = deepcopy(base_embed)
             embeds.append(embed)
-        embed.add_field(name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
+        embed.insert_field_at(0, name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
         i += 1
+    if not embeds:
+        embed = deepcopy(base_embed)
+        embed.insert_field_at(0, name = "No Bots In Queue!", value = "There are no bots in queue! Just relax :)")
+        return await ctx.send(embed = embed)
     return await menu(ctx, embeds, {":x:": close_menu, ":track_next:": next_page, ":track_previous:": prev_page})
 
 async def _iamstaff(ctx):
