@@ -29,7 +29,7 @@ class User(commands.Cog):
         keys = (("bot_developer", "main_botdevrole", "You are not a bot developer"), ("certified_developer", "main_certdevrole", "You do not have any certified bots"))  # keep comment here for github
         for key in keys:
             role = key[0].replace('_', ' ').title()
-            if not res[1][key[0]]:
+            if not profile[key[0]]:
                 embed.add_field(name = role, value = f":x: Not going to give you the {role} role because: *{key[2]}*")
                 failed += 1
                 continue
