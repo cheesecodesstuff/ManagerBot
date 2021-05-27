@@ -160,13 +160,15 @@ async def _queue(ctx):
     base_embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
     base_embed.set_thumbnail(url = str(ctx.guild.icon_url))
     embeds = [] # List of queue bot embeds
-    i = 1
+    i, e = 1, 0
     for bot in queue_json["bots"]:
         if i % 5 == 1:
             embed = deepcopy(base_embed)
             embeds.append(embed)
-        embed.insert_field_at(i - 1, name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
+            e = 0
+        embed.insert_field_at(e, name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
         i += 1
+        e += 1
     if not embeds:
         embed = deepcopy(base_embed)
         embed.insert_field_at(0, name = "No Bots In Queue!", value = "There are no bots in queue! Just relax :)")
