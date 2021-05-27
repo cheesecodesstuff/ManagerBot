@@ -245,4 +245,4 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
     return await _handle(ctx, bot, op, ban_res)
 
 async def _profile(ctx, user_id):
-    return await _request("GET", f"/api/users/{user_id}")
+    return await _request("GET", ctx, f"/api/users/{user_id}")
