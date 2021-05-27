@@ -159,6 +159,7 @@ async def _queue(ctx):
     base_embed = Embed(title = "Bots In Queue", description = "These are the bots in the Fates List Queue. Be sure to review them from top to bottom, ignoring Fates List bots")
     base_embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
     base_embed.set_thumbnail(url = str(ctx.guild.icon_url))
+    embeds = [] # List of queue bot embeds
     i = 1
     for bot in queue_json["bots"]:
         if i % 3 == 1:
