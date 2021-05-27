@@ -165,7 +165,7 @@ async def _queue(ctx):
         if i % 5 == 1:
             embed = deepcopy(base_embed)
             embeds.append(embed)
-        embed.insert_field_at(0, name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
+        embed.insert_field_at(i - 1, name = f"{i}. {bot['user']['username']}#{bot['user']['disc']} ({bot['user']['id']})", value = f"This bot has a status of **{Status(bot['user']['status']).__doc__}** and a prefix of **{bot['prefix']}** -> [Invite Bot]({bot['invite']})\n\n**Description:** {bot['description']}\n​")
         i += 1
     if not embeds:
         embed = deepcopy(base_embed)
