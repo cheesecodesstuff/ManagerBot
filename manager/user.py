@@ -9,8 +9,8 @@ class User(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    async def cog_check(self, ctx): 
-        return await _cog_check(ctx, ServerEnum.MAIN_SERVER)
+    async def cog_check(self, ctx):
+        return await _cog_check(ctx, ServerEnum.MAIN_SERVER) 
 
     @commands.command(aliases=["botdev", "certdev", "giveroles"])
     async def roles(self, ctx):
