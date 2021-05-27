@@ -53,7 +53,7 @@ class User(commands.Cog):
     async def profile(self, ctx, user: Optional[User] = None):
         """Gets a users profile (Not yet done)"""
         target = user if user else ctx.author
-        profile = await _profile(ctx, target.id)
+        profile = await _profile(ctx, target)
         if not profile:
             return
         embed = Embed(title = f"{target}'s Profile", description = "Here is your profile")
