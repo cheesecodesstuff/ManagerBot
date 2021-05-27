@@ -242,7 +242,7 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
 
 async def _profile(ctx, user):
     """Gets the users profile, sends a message and returns None if not found"""
-    if target.bot:
+    if usrr.bot:
         embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
         await ctx.send(embed = embed)
         return None
