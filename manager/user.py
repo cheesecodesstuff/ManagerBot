@@ -18,15 +18,10 @@ class User(commands.Cog):
     async def roles(self, ctx, target: Optional[Member] = None):
         """Gives bot devs their roles. **MAIN SERVER ONLY**"""
         target = target if target else ctx.author
-        if target.bot:
-            embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
-            await ctx.send(embed = embed)
-        res = await _profile(ctx, target.id)
-        if res[0] == 404:
-            embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
-            await ctx.send(embed = embed)
-            return
-    
+        profile = await _profile(ctx, target)
+        if not profile:
+            return 
+        
         embed = Embed(title = "Roles Given", description = "These are the roles you have got on Fates List", color = Color.blue())
     
         i = 1
@@ -58,14 +53,9 @@ class User(commands.Cog):
     async def profile(self, ctx, user: Optional[User] = None):
         """Gets a users profile (Not yet done)"""
         target = user if user else ctx.author
-        if target.bot:
-            embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
-            await ctx.send(embed = embed)
-        res = await _profile(ctx, target.id)
-        if res[0] == 404:
-            embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
-            await ctx.send(embed = embed)
-        profile = res[1]
+        profile = await _profile(ctx, target.id)
+        if not profile:
+            return
         embed = Embed(title = f"{target}'s Profile", description = "Here is your profile")
         embed.add_field(name = "User ID", value = profile['id'])
         embed.add_field(name = "Username", value = profile['username'])
