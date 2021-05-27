@@ -18,7 +18,7 @@ class User(commands.Cog):
     async def roles(self, ctx):
         """Gives bot devs their roles. **MAIN SERVER ONLY**"""
         
-        res = await _request("GET", ctx, f"/api/users/{ctx.author.id}")
+        res = await _profile(ctx, ctx.author.id)
         if res[0] == 404:
             embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
             await ctx.send(embed = embed)
@@ -54,5 +54,11 @@ class User(commands.Cog):
     @commands.command()
     async def profile(self, ctx, user: Optional[User] = None):
         target = user if user else ctx.author
-        profile = await _profile(ctx, target)
+        profile = await _profile(ctx, target.id)
         embed = Embed(title = f"{target.user}'s Profile", description = "Here is your profile")
+        embed.add_field(name = "User ID", value = profile['id'])
+        embed.add_field(name = "Username", value = profile['username'])
+        embed.add_field(name = "Discriminator/Tag", value = profile['disc'])
+        embed.add_field(name = "Avatar", value = profile['avatar'])
+        embed.add_field(name = "Defunct", value = profile['defunct'])
+        embed.add_field(name = "Status", value = profile['status'])
