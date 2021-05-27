@@ -232,3 +232,6 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
     op = "Ban" if ban else "Unban"
     ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": reason})
     return await _handle(ctx, bot, op, ban_res)
+
+async def _profile(ctx, user_id):
+    return await _request("GET", f"/api/users/{user_id}")
