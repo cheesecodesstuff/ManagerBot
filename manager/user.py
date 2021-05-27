@@ -60,10 +60,11 @@ class User(commands.Cog):
         if target.bot:
             embed = Embed(title = "No Profile Found", description = "Bots can't *have* profiles", color = Color.red())
             await ctx.send(embed = embed)
-        profile = await _profile(ctx, target.id)
+        res = await _profile(ctx, target.id)
         if res[0] == 404:
             embed = Embed(title = "No Profile Found", description = "You have not even logged in even once on Fates List!", color = Color.red())
             await ctx.send(embed = embed)
+        profile = res[1]
         embed = Embed(title = f"{target}'s Profile", description = "Here is your profile")
         embed.add_field(name = "User ID", value = profile['id'])
         embed.add_field(name = "Username", value = profile['username'])
