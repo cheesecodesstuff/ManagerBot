@@ -23,7 +23,8 @@ class User(commands.Cog):
                 channel = self.bot.get_channel(log_channel)
                 await channel.purge(limit = 100) # Delete old messages there
                 self.msg = await channel.send(embed = stats)
-                await self.msg.pin()
+                await self.msg.pin(reason = "Stat Message Pin")
+                await channel.purge(limit = 1) # Remove Fates List Manager has pinned...
             else:
                 await self.msg.edit(embed = stats)
         except:
