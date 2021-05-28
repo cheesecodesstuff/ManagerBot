@@ -280,7 +280,7 @@ class __PIDRecorder():
 __pidrec = __PIDRecorder()
  
 # usage: (_d, _h, _m, _s, _mils, _mics) = tdTuple(td)
-def tdTuple(td:datetime.timedelta) -> tuple:
+def __tdTuple(td:datetime.timedelta) -> tuple:
     def _t(t, n):
         if t < n: return (t, 0)
         v = t//n
@@ -295,7 +295,7 @@ async def _blstats(ctx):
     except:
         res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown"}]
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
-    upd = tdTuple(datetime.timedelta(res[1]['uptime']))
+    upd = __tdTuple(datetime.timedelta(seconds = res[1]['uptime']))
     uptime = f"{upd[0]} days, {upd[1]} hours, {upd[2]} minutes, {upd[3]} seconds"
     embed.add_field(name = "Uptime", value = uptime)
     embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
