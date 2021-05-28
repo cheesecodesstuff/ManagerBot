@@ -285,7 +285,7 @@ async def _blstats(ctx):
     except:
         res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown"}]
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
-    uptime = time.strftime("%d days, %H hours, %M minutes, %S seconds", time.localtime(res[1]['uptime']))
+    uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds")
     embed.add_field(name = "Uptime", value = uptime)
     embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
     embed.add_field(name = "Recorded Worker", value = str(__pidrec.get(res[1]["pid"])))  
