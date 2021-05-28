@@ -9,6 +9,7 @@ class User(commands.Cog):
     """Commands made specifically for users to use"""
     def __init__(self, bot):
         self.bot = bot
+        self.msg = None
         self.statloop.start()
     
     @tasks.loop(minutes = 5)
@@ -16,9 +17,14 @@ class User(commands.Cog):
         servers = await _get(self.bot.guilds[0].owner, self.bot, ["stats_channel"])
         log_channel = servers.get("stats_channel")
         ctx = MiniContext(self.bot.guilds[0].owner, self.bot)
-        stats = await _blstats(ctx)
-        channel = self.bot.get_channel(log_channel)
-        await channel.send(embed = stats)
+        try:
+            stats = await _blstats(ctx)
+            if not self.msg:
+                channel = self.bot.get_channel(log_channel)
+                self.msg = await channel.send(embed = stats)
+            else:
+                await self.msg.edit(embed = stats)
+            
     
     def cog_unload(self):
         self.statloop.cancel()
