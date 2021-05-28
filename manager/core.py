@@ -8,7 +8,7 @@ from http import HTTPStatus
 from typing import Optional, Union
 from redbot.core.utils.menus import menu, prev_page, next_page, close_menu
 from copy import deepcopy
-import time
+import datetime
 
 class RequestFailed(Exception):
     def __init__(self, string):
@@ -278,14 +278,25 @@ class __PIDRecorder():
             return len(self.pids)
 
 __pidrec = __PIDRecorder()
-        
+ 
+# usage: (_d, _h, _m, _s, _mils, _mics) = tdTuple(td)
+def tdTuple(td:datetime.timedelta) -> tuple:
+    def _t(t, n):
+        if t < n: return (t, 0)
+        v = t//n
+        return (t -  (v * n), v)
+    (s, h) = _t(td.seconds, 3600)
+    (s, m) = _t(s, 60)    
+    return (td.days, h, m, s)
+
 async def _blstats(ctx):
     try:
         res = await _request("GET", ctx, f"/api/blstats")
     except:
         res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown"}]
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
-    uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds")
+    upd = tdTuple(datetime.timedelta(res[1]['uptime']))
+    uptime = f"{upd[0]} days, {upd[1]} hours, {upd[2]} minutes, {upd[3]} seconds"
     embed.add_field(name = "Uptime", value = uptime)
     embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
     embed.add_field(name = "Recorded Worker", value = str(__pidrec.get(res[1]["pid"])))  
