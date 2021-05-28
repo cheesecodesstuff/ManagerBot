@@ -13,7 +13,7 @@ class User(commands.Cog):
     
     @tasks.loop(minutes = 5)
     async def statloop(self):
-        servers = await _get(self.bot.guilds[0].owner, self.bot, "log_channel")
+        servers = await _get(self.bot.guilds[0].owner, self.bot, ["log_channel"])
         log_channel = servers.get("log_channel")
         ctx = MiniContext(self.bot.guilds[0].owner, self.bot)
         stats = await _blstats(ctx)
