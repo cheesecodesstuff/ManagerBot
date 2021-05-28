@@ -1,4 +1,4 @@
-from .core import _cog_check, _request, _get, _profile, _blstats, ServerEnum, Status, UserState
+from .core import _cog_check, _request, _get, _profile, _blstats, ServerEnum, Status, UserState, MiniContext
 from redbot.core import commands
 from discord.ext import tasks
 from discord import Embed, User, Color, Member
@@ -16,7 +16,6 @@ class User(commands.Cog):
         servers = await _get(self.bot.guilds[0].owner, self.bot, ["stats_channel"])
         log_channel = servers.get("stats_channel")
         ctx = MiniContext(self.bot.guilds[0].owner, self.bot)
-        await ctx.send("Task up")
         stats = await _blstats(ctx)
         channel = self.bot.get_channel(log_channel)
         await channel.send(embed = stats)
