@@ -9,6 +9,7 @@ from http import HTTPStatus
 from typing import Optional, Union
 from redbot.core.utils.menus import menu, prev_page, next_page, close_menu
 from copy import deepcopy
+import datetime
 
 class RequestFailed(Exception):
     def __init__(self, string):
@@ -268,3 +269,7 @@ async def _profile(ctx, user):
 async def _blstats(ctx):
     res = await _request("GET", ctx, f"/api/blstats")
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
+    uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds")
+    embed.add_field(name = "Uptime", value = uptime)
+    await ctx.send(embed = embed)
+    return
