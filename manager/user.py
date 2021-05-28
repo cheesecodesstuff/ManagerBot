@@ -24,6 +24,8 @@ class User(commands.Cog):
                 self.msg = await channel.send(embed = stats)
             else:
                 await self.msg.edit(embed = stats)
+        except:
+            pass
             
     
     def cog_unload(self):
