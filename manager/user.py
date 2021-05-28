@@ -1,5 +1,5 @@
 from .core import _cog_check, _request, _get, _profile, _blstats, ServerEnum, Status, UserState
-from redbot.core import commands
+from redbot.core import commands, tasks
 from discord import Embed, User, Color, Member
 from http import HTTPStatus
 from typing import Optional
@@ -8,6 +8,19 @@ class User(commands.Cog):
     """Commands made specifically for users to use"""
     def __init__(self, bot):
         self.bot = bot
+        self.statloop.start()
+    
+    @tasks.loop(minutes = 5)
+    async def statloop(self):
+        servers = await _get(self.bot.guilds[0].owner, self.bot, "log_channel")
+        log_channel = servers.get("log_channel")
+        ctx = MiniContext(self.bot.guilds[0].owner, self.bot)
+        stats = await _blstats(ctx)
+        channel = self.bot.get_channel(log_channel)
+        await channel.send(embed = embed)
+    
+    def cog_unload(self):
+        self.statloop.cancel()
     
     async def cog_check(self, ctx):
         if ctx.command.name in ("roles",):
