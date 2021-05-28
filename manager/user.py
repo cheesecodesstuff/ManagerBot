@@ -18,6 +18,7 @@ class User(commands.Cog):
         ctx = MiniContext(self.bot.guilds[0].owner, self.bot)
         stats = await _blstats(ctx)
         channel = self.bot.get_channel(log_channel)
+        await ctx.send(str(channel))
         await channel.send(embed = stats)
     
     def cog_unload(self):
