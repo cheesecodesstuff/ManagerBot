@@ -1,5 +1,6 @@
 from .core import _cog_check, _request, _get, _profile, _blstats, ServerEnum, Status, UserState
-from redbot.core import commands, tasks
+from redbot.core import commands
+from discord.ext import tasks
 from discord import Embed, User, Color, Member
 from http import HTTPStatus
 from typing import Optional
