@@ -264,3 +264,7 @@ async def _profile(ctx, user):
         await ctx.send(embed = embed)
         return None
     return res[1]
+
+async def _blstats(ctx):
+    res = await _request("GET", ctx, f"/api/blstats")
+    embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
