@@ -282,7 +282,7 @@ __pidrec = __PIDRecorder()
 async def _blstats(ctx):
     res = await _request("GET", ctx, f"/api/blstats")
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
-    uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds)
+    uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds")
     embed.add_field(name = "Uptime", value = uptime)
     embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
     embed.add_field(name = "Recorded Worker", value = str(__pidrec.get(res[1]["pid"])))                                                                   
