@@ -21,12 +21,13 @@ class User(commands.Cog):
             stats = await _blstats(ctx)
             if not self.msg:
                 channel = self.bot.get_channel(log_channel)
+                await channel.purge(limit = 100) # Delete old messages there
                 self.msg = await channel.send(embed = stats)
+                await self.msg.pin()
             else:
                 await self.msg.edit(embed = stats)
         except:
-            pass
-            
+            pass        
     
     def cog_unload(self):
         self.statloop.cancel()
