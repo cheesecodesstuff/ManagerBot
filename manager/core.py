@@ -162,7 +162,7 @@ async def _queue(ctx):
     i, e = 1, 0 # i is global bot counter, e is local bot counter, always between 0 and 5
     
     for bot in queue_json["bots"]: # Get all bots in 5 different embeds based on base_embed
-        if e == 4 1 or i == 1: # Check if we are locally at the next 1 sum (0 to 1 is 1 bots) or if the global counter is 1 (first embed set)
+        if e == 1 or i == 1: # Check if we are locally at the next 1 sum (0 to 1 is 1 bots) or if the global counter is 1 (first embed set)
             embed = deepcopy(base_embed)
             embeds.append(embed)
             e = 0
