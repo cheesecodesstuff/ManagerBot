@@ -290,5 +290,4 @@ async def _blstats(ctx):
     embed.add_field(name = "Discord UP (dup)?", value = str(res[1]["dup"]))
     embed.add_field(name = "Bot Count", value = str(res[1]["bot_count"]))
     embed.add_field(name = "Bot Count (Total)", value = str(res[1]["bot_count_total"]))
-    await ctx.send(embed = embed)
-    return
+    return embed
