@@ -285,6 +285,10 @@ async def _blstats(ctx):
     uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds")
     embed.add_field(name = "Uptime", value = uptime)
     embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
-    embed.add_field(name = "Recorded Worker", value = str(__pidrec.get(res[1]["pid"])))                                
+    embed.add_field(name = "Recorded Worker", value = str(__pidrec.get(res[1]["pid"])))  
+    embed.add_field(name = "UP?", value = str(res[1]["up"]))
+    embed.add_field(name = "Discord UP (dup)?", value = str(res[1]["dup"]))
+    embed.add_field(name = "Bot Count", value = str(res[1]["bot_count"]))
+    embed.add_field(name = "Bot Count (Total)", value = str(res[1]["bot_count_total"]))
     await ctx.send(embed = embed)
     return
