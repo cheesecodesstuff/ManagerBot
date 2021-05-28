@@ -160,8 +160,7 @@ async def _queue(ctx):
     base_embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
     base_embed.set_thumbnail(url = str(ctx.guild.icon_url))
     embeds = [] # List of queue bot embeds
-    i, e = 1, 0 # i is global bot counter, e is local bot counter, always between 0 and 5
-    
+    i, e = 1, 0 # i is global bot counter, e is local bot counter, always between 0 and 3
     for bot in queue_json["bots"]: # Get all bots in 5 different embeds based on base_embed
         if e == 3 or i == 1: # Check if we are locally at the next 4 sum (0, 1, 2, 3 is 4 bots) or if the global counter is 1 (first embed set)
             embed = deepcopy(base_embed)
