@@ -1,7 +1,6 @@
 from redbot.core import commands
 from redbot.core import Config
 import aiohttp
-from aiohttp_requests import requests
 from pydantic import BaseModel
 from aenum import IntEnum
 from discord import Embed, User, Color
@@ -31,22 +30,23 @@ async def _request(method, ctx, url, **kwargs):
     headers["Authorization"] = fateslist_data.get("manager")
     headers["FatesList-RateLimitBypass"] = fateslist_data.get("rl")
     headers["FL-API-Version"] = "2"
-    f = eval(f"requests.{method.lower()}")
-    res = await f(fateslist_data.get("site_url") + url, json = kwargs.get("json"), headers = headers, timeout = kwargs.get("timeout"))
-    if res.status == 401:
-        await ctx.send("**Request Failed**\nGiven API Keys are invalid! nPlease set the needed keys using `[p]set api fateslist manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL`")
-        raise RequestFailed("Invalid API Keys")
-    elif res.status == 429:
-        await ctx.send("**Request Failed**\nThis bot is being ratelimited by the Fates List API. Is your ratelimit bypass key correct?")
-        raise RequestFailed("Ratelimited")
-    elif res.status == 422:
-        await ctx.send("**Request Failed**\nThis API Endpoint returned a 422. This usually means that either the bot or API must be updated and reloaded. Try asking the owners on the staff server to update the bot and restart the site.")
-        raise RequestFailed(f"{url} returned 422")
-    elif res.status == 500:
-        await ctx.send("**Request Failed**\nThis API Endpoint returned a 500 (Internal Server Error). Please ask for support on the staff server, pinging the owners")
-        raise RequestFailed(f"Internal Server Error at {url}")
-    res_json = await res.json()
-    return res.status, res_json
+    async with aiohttp.ClientSession() as sess:
+        f = getattr(sess, method.lower())
+        async with f(fateslist_data.get("site_url") + url, json = kwargs.get("json"), headers = headers, timeout = kwargs.get("timeout")) as res:
+            if res.status == 401:
+                await ctx.send("**Request Failed**\nGiven API Keys are invalid! nPlease set the needed keys using `[p]set api fateslist manager,MANAGER_KEY rl,RATELIMIT_BYPASS_KEY site_url,SITE_URL`")
+                raise RequestFailed("Invalid API Keys")
+            elif res.status == 429:
+                await ctx.send("**Request Failed**\nThis bot is being ratelimited by the Fates List API. Is your ratelimit bypass key correct?")
+                raise RequestFailed("Ratelimited")
+            elif res.status == 422:
+                await ctx.send("**Request Failed**\nThis API Endpoint returned a 422. This usually means that either the bot or API must be updated and reloaded. Try asking the owners on the staff server to update the bot and restart the site.")
+                raise RequestFailed(f"{url} returned 422")
+            elif res.status == 500:
+                await ctx.send("**Request Failed**\nThis API Endpoint returned a 500 (Internal Server Error). Please ask for support on the staff server, pinging the owners")
+                raise RequestFailed(f"Internal Server Error at {url}")
+            res_json = await res.json()
+            return res.status, res_json
    
 # Copy this from Fates
 class StaffMember(BaseModel):
@@ -280,7 +280,10 @@ class __PIDRecorder():
 __pidrec = __PIDRecorder()
         
 async def _blstats(ctx):
-    res = await _request("GET", ctx, f"/api/blstats")
+    try:
+        res = await _request("GET", ctx, f"/api/blstats")
+    except:
+        res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown"}]
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
     uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds")
     embed.add_field(name = "Uptime", value = uptime)
