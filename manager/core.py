@@ -275,7 +275,8 @@ class __PIDRecorder():
             return self.pids.index(pid) + 1
         except ValueError:
             self.pids.append(pid)
-            return len(pid)
+            self.pids.sort()
+            return len(self.pids)
 
 __pidrec = __PIDRecorder()
         
