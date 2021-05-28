@@ -1,4 +1,4 @@
-from .core import _cog_check, _request, _get, _profile, ServerEnum, Status, UserState
+from .core import _cog_check, _request, _get, _profile, _blstats, ServerEnum, Status, UserState
 from redbot.core import commands
 from discord import Embed, User, Color, Member
 from http import HTTPStatus
@@ -49,6 +49,10 @@ class User(commands.Cog):
             return await ctx.send(str(ctx.channel.category.id)) 
         return await ctx.send("No category attached to this channel")  
 
+    @commands.command()
+    async def stats(self, ctx):
+        return await _blstats(ctx)
+    
     @commands.command()
     async def profile(self, ctx, user: Optional[User] = None):
         """Gets a users profile (Not yet done)"""
