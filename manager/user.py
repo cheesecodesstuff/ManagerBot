@@ -51,7 +51,8 @@ class User(commands.Cog):
 
     @commands.command()
     async def stats(self, ctx):
-        return await _blstats(ctx)
+        embed = await _blstats(ctx)
+        await ctx.send(embed = embed)
     
     @commands.command()
     async def profile(self, ctx, user: Optional[User] = None):
