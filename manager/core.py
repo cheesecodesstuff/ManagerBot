@@ -266,10 +266,25 @@ async def _profile(ctx, user):
         return None
     return res[1]
 
+class __PIDRecorder():
+    """Internal function to record worker PIDs"""
+    def __init__(self):
+        self.pids = []
+    def get(self, pid):
+        try:
+            return self.pids.index(pid) + 1
+        except ValueError:
+            self.pids.append(pid)
+            return len(pid)
+
+__pidrec = __PIDRecorder()
+        
 async def _blstats(ctx):
     res = await _request("GET", ctx, f"/api/blstats")
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
-    uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds")
+    uptime = datetime.datetime.fromtimestamp(res[1]['uptime']).strftime("%d days, %H hours, %M minutes, %S seconds)
     embed.add_field(name = "Uptime", value = uptime)
+    embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
+    embed.add_field(name = "Recorded Worker", value = str(__pidrec.get(res[1]["pid"])))                                                                   
     await ctx.send(embed = embed)
     return
