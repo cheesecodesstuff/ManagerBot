@@ -16,9 +16,9 @@ class User(commands.Cog):
         servers = await _get(self.bot.guilds[0].owner, self.bot, ["stats_channel"])
         log_channel = servers.get("stats_channel")
         ctx = MiniContext(self.bot.guilds[0].owner, self.bot)
+        await ctx.send("Task up")
         stats = await _blstats(ctx)
         channel = self.bot.get_channel(log_channel)
-        await ctx.send(str(channel))
         await channel.send(embed = stats)
     
     def cog_unload(self):
