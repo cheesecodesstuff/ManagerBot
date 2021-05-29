@@ -292,8 +292,8 @@ def __tdTuple(td:datetime.timedelta) -> tuple:
 async def _blstats(ctx):
     try:
         res = await _request("GET", ctx, f"/api/blstats")
-    except:
-        res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown"}]
+    except Exception as exc:
+        res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown", "error": exc}]
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
     upd = __tdTuple(datetime.timedelta(seconds = res[1]['uptime']))
     uptime = f"{upd[0]} days, {upd[1]} hours, {upd[2]} minutes, {upd[3]} seconds"
@@ -304,4 +304,5 @@ async def _blstats(ctx):
     embed.add_field(name = "Discord UP (dup)?", value = str(res[1]["dup"]))
     embed.add_field(name = "Bot Count", value = str(res[1]["bot_count"]))
     embed.add_field(name = "Bot Count (Total)", value = str(res[1]["bot_count_total"]))
+    embed.add_field(name = "Errors", value = res[1]["error"] if res[1].get("error") else "No errors fetching stats from API")
     return embed
