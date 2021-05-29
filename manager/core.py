@@ -293,7 +293,7 @@ async def _blstats(ctx):
     try:
         res = await _request("GET", ctx, f"/api/blstats")
     except Exception as exc:
-        res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown", "error": exc}]
+        res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown", "error": f"{type(exc).__name__}: {exc}"}]
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
     upd = __tdTuple(datetime.timedelta(seconds = res[1]['uptime']))
     uptime = f"{upd[0]} days, {upd[1]} hours, {upd[2]} minutes, {upd[3]} seconds"
