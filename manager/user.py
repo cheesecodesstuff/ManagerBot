@@ -27,8 +27,9 @@ class User(commands.Cog):
                 await channel.purge(limit = 1) # Remove Fates List Manager has pinned...
             else:
                 await self.msg.edit(embed = stats)
-        except:
-            pass        
+        except Exception as exc:
+            print(f"{type(exc).__name__}: {exc}", flush = True)
+            
     
     def cog_unload(self):
         self.statloop.cancel()
