@@ -14,7 +14,7 @@ class User(commands.Cog):
     
     @tasks.loop(minutes = 5)
     async def statloop(self):
-        await self.bot.wait_until_ready()
+        await self.bot.wait_until_red_ready()
         servers = await _get(self.bot.guilds[0].owner, self.bot, ["stats_channel"])
         log_channel = servers.get("stats_channel")
         try:
