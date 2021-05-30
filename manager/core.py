@@ -257,7 +257,7 @@ async def _certify_uncertify(ctx, bot: User, certify: bool):
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
     op = "Certify" if certify else "Uncertofu"
-    certify_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/certify", json = {"mod": str(ctx.author.id), "certify": certify, "reason": reason})
+    certify_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/certify", json = {"mod": str(ctx.author.id), "certify": certify})
     return await _handle(ctx, bot, op, certify_res)
 
 async def _profile(ctx, user):
