@@ -294,7 +294,7 @@ async def _blstats(ctx):
     embed.add_field(name = "Uptime", value = uptime)
     embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
     embed.add_field(name = "Worker Number", value = res[1]["workers"].index(res[1]["pid"]))
-    embed.add_field(name = "Workers", value = f"{', '.join(res[1]["workers"])} ({len(res[1]["workers"])} workers)")
+    embed.add_field(name = "Workers", value = f"{', '.join(res[1]['workers'])} ({len(res[1]['workers'])} workers)")
     embed.add_field(name = "UP?", value = str(res[1]["up"]))
     embed.add_field(name = "Discord UP (dup)?", value = str(res[1]["dup"]))
     embed.add_field(name = "Bot Count", value = str(res[1]["bot_count"]))
