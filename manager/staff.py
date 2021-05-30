@@ -26,9 +26,20 @@ class Staff(commands.Cog):
 
     @commands.command()
     async def unban(self, ctx, bot: User):
-        """unban a bot from the list"""
+        """Unbans a bot from the list"""
         return await _ban_unban(ctx, bot, "", False)
-
+    
+    @commands.command()
+    async def certify(self, ctx, bot: User):
+        """Certifies a bot on the list"""
+        return await _certify_uncertify(ctx, bot, True)
+    
+    @commands.command()
+    async def uncertify(self, ctx, bot: User):
+        """Uncertifies a bot on the list"""
+        return await _certify_uncertify(ctx, bot, False)
+        
+        
     @commands.command()
     async def allowbot(self, ctx, bot: User):
         """Shhhhh.... secret command to allow adding a bot to the staff server"""
