@@ -154,7 +154,7 @@ async def _cog_check(ctx, state: ServerEnum):
     return True
 
 async def _queue(ctx):
-    queue = await _request("GET", ctx, "/api/bots/admin/queue")
+    queue = await _request("GET", ctx, "/api/admin/queue/bots")
     queue_json = queue[1]
     base_embed = Embed(title = "Bots In Queue", description = "These are the bots in the Fates List Queue. Be sure to review them from top to bottom, ignoring Fates List bots")
     base_embed.add_field(name="Credits", value = "skylarr#6666 - For introducing me to redbot and hosting Fates List\nNotDraper#6666 - For helping me through a variety of bugs in the bot")
@@ -233,7 +233,7 @@ async def _claim_unclaim_requeue(ctx, bot: User, t: int):
     if not bot.bot:
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
-    claim_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": t})
+    claim_res = await _request("PATCH", ctx, f"/api/admin/bots/{bot.id}/under_review", json = {"mod": str(ctx.author.id), "requeue": t})
     return await _handle(ctx, bot, op, claim_res, succ)
     
 async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
@@ -241,7 +241,7 @@ async def _approve_deny(ctx, bot: User, feedback: str, approve: bool):
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
     op = "Approve" if approve else "Deny"
-    approve_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/queue", json = {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
+    approve_res = await _request("PATCH", ctx, f"/api/admin/bots/{bot.id}/queue", json = {"mod": str(ctx.author.id), "approve": approve, "feedback": feedback})
     return await _handle(ctx, bot, op, approve_res, kick = True)
 
 async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
@@ -249,7 +249,7 @@ async def _ban_unban(ctx, bot: User, reason: str, ban: bool):
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
     op = "Ban" if ban else "Unban"
-    ban_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": reason})
+    ban_res = await _request("PATCH", ctx, f"/api/admin/bots/{bot.id}/ban", json = {"mod": str(ctx.author.id), "ban": ban, "reason": reason})
     return await _handle(ctx, bot, op, ban_res)
 
 async def _certify_uncertify(ctx, bot: User, certify: bool):
@@ -257,7 +257,7 @@ async def _certify_uncertify(ctx, bot: User, certify: bool):
         await ctx.send("That isn't a bot. Please make sure you are pinging a bot or specifying a Bot ID")
         return
     op = "Certify" if certify else "Uncertify"
-    certify_res = await _request("PATCH", ctx, f"/api/bots/admin/{bot.id}/certify", json = {"mod": str(ctx.author.id), "certify": certify})
+    certify_res = await _request("PATCH", ctx, f"/api/admin/bots/{bot.id}/certify", json = {"mod": str(ctx.author.id), "certify": certify})
     return await _handle(ctx, bot, op, certify_res)
 
 async def _profile(ctx, user):
@@ -273,6 +273,7 @@ async def _profile(ctx, user):
         return None
     return res[1]
 
+# Temporary while I update blstats to have this as a direct no hacks option
 class __PIDRecorder():
     """Internal function to record worker PIDs"""
     def __init__(self):
