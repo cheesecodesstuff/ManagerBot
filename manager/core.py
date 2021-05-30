@@ -272,21 +272,6 @@ async def _profile(ctx, user):
         await ctx.send(embed = embed)
         return None
     return res[1]
-
-# Temporary while I update blstats to have this as a direct no hacks option
-class __PIDRecorder():
-    """Internal function to record worker PIDs"""
-    def __init__(self):
-        self.pids = []
-    def get(self, pid):
-        try:
-            return self.pids.index(pid) + 1
-        except ValueError:
-            self.pids.append(pid)
-            self.pids.sort()
-            return len(self.pids)
-
-__pidrec = __PIDRecorder()
  
 # usage: (_d, _h, _m, _s, _mils, _mics) = tdTuple(td)
 def __tdTuple(td:datetime.timedelta) -> tuple:
@@ -300,15 +285,15 @@ def __tdTuple(td:datetime.timedelta) -> tuple:
 
 async def _blstats(ctx):
     try:
-        res = await _request("GET", ctx, f"/api/blstats")
+        res = await _request("GET", ctx, f"/api/blstats?workers=true")
     except Exception as exc:
-        res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown", "error": f"{type(exc).__name__}: {exc}"}]
+        res = [502, {"uptime": 0, "pid": 0, "up": False, "dup": False, "bot_count": "Unknown", "bot_count_total": "Unknown", "error": f"{type(exc).__name__}: {exc}", "workers": [0]}]
     embed = Embed(title = "Bot List Stats", description = "Fates List Stats")
     upd = __tdTuple(datetime.timedelta(seconds = res[1]['uptime']))
     uptime = f"{upd[0]} days, {upd[1]} hours, {upd[2]} minutes, {upd[3]} seconds"
     embed.add_field(name = "Uptime", value = uptime)
     embed.add_field(name = "Worker PID", value = str(res[1]["pid"]))
-    embed.add_field(name = "Recorded Worker", value = str(__pidrec.get(res[1]["pid"])))  
+    embed.add_field(name = "Recorded Worker", value = res[1]["workers"].index(res[1]["pid"]))
     embed.add_field(name = "UP?", value = str(res[1]["up"]))
     embed.add_field(name = "Discord UP (dup)?", value = str(res[1]["dup"]))
     embed.add_field(name = "Bot Count", value = str(res[1]["bot_count"]))
